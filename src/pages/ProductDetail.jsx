@@ -60,10 +60,10 @@ const ProductDetail = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
           <div className="flex items-center space-x-4 mb-6">
             <span className="text-4xl font-bold text-gray-900">
-              ${product.price.toFixed(2)}
+              {product.price.toFixed(2)}INR
             </span>
             <span className="text-2xl text-gray-500 line-through">
-              ${product.originalPrice.toFixed(2)}
+              {product.originalPrice.toFixed(2)}INR
             </span>
           </div>
           <p className="text-gray-700 mb-6">{product.description}</p>

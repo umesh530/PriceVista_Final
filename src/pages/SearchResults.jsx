@@ -38,7 +38,7 @@ const SearchResults = () => {
   const generateMockSearchResults = (searchQuery, searchFilters) => {
     const results = []
     const categories = ['Electronics', 'Fashion', 'Home & Garden', 'Sports', 'Books', 'Toys']
-    const retailers = ['Amazon', 'Walmart', 'Target', 'Best Buy', 'eBay']
+    const retailers = ['Amazon', 'Flipkart', 'Meesho', 'Nyka', 'Blinkit']
     
     for (let i = 0; i < 20; i++) {
       const basePrice = 20 + Math.random() * 300
@@ -132,11 +132,11 @@ const SearchResults = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">Any Price</option>
-                <option value="0-50">Under $50</option>
-                <option value="50-100">$50 - $100</option>
-                <option value="100-200">$100 - $200</option>
-                <option value="200-500">$200 - $500</option>
-                <option value="500+">Over $500</option>
+                <option value="0-50">Under 50INR</option>
+                <option value="50-100">50INR - 100INR</option>
+                <option value="100-200">100INR - 200INR</option>
+                <option value="200-500">200INR - 500INR</option>
+                <option value="500+">Over 500INR</option>
               </select>
             </div>
 
@@ -169,10 +169,10 @@ const SearchResults = () => {
               >
                 <option value="">All Retailers</option>
                 <option value="Amazon">Amazon</option>
-                <option value="Walmart">Walmart</option>
-                <option value="Target">Target</option>
-                <option value="Best Buy">Best Buy</option>
-                <option value="eBay">eBay</option>
+                <option value="Flipkart">Flipkart</option>
+                <option value="Meesho">Meesho</option>
+                <option value="Nyka">Nyka</option>
+                <option value="Blinkit">Blinkit</option>
               </select>
             </div>
 

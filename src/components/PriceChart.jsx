@@ -143,9 +143,9 @@ const PriceChart = ({ productId, period = '30d' }) => {
 
         {/* Price labels */}
         <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500">
-          <span>${maxPrice.toFixed(2)}</span>
-          <span>${(minPrice + priceRange / 2).toFixed(2)}</span>
-          <span>${minPrice.toFixed(2)}</span>
+          <span>{maxPrice.toFixed(2)}INR</span>
+          <span>{(minPrice + priceRange / 2).toFixed(2)}INR</span>
+          <span>{minPrice.toFixed(2)}INR</span>
         </div>
 
         {/* Date labels */}
@@ -160,17 +160,17 @@ const PriceChart = ({ productId, period = '30d' }) => {
       <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-200">
         <div className="text-center">
           <p className="text-sm text-gray-600">Lowest</p>
-          <p className="text-lg font-semibold text-green-600">${minPrice.toFixed(2)}</p>
+          <p className="text-lg font-semibold text-green-600">{minPrice.toFixed(2)}INR</p>
         </div>
         <div className="text-center">
           <p className="text-sm text-gray-600">Current</p>
           <p className="text-lg font-semibold text-primary-600">
-            ${priceData[priceData.length - 1]?.price.toFixed(2)}
+            {priceData[priceData.length - 1]?.price.toFixed(2)}INR
           </p>
         </div>
         <div className="text-center">
           <p className="text-sm text-gray-600">Highest</p>
-          <p className="text-lg font-semibold text-red-600">${maxPrice.toFixed(2)}</p>
+          <p className="text-lg font-semibold text-red-600">{maxPrice.toFixed(2)}INR</p>
         </div>
       </div>
     </div>
