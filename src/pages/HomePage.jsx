@@ -34,15 +34,52 @@ const HomePage = () => {
     const categories = ['Electronics', 'Fashion', 'Home & Garden', 'Sports', 'Books', 'Toys']
     const retailers = ['Amazon', 'Walmart', 'Target', 'Best Buy', 'eBay']
     
+    // Product name templates based on categories
+    const productTemplates = {
+      'Electronics': [
+        'Laptop', 'Smartphone', 'Headphones', 'Camera', 'TV', 'Monitor', 'Gaming Console',
+        'Tablet', 'Speaker', 'Microphone', 'Keyboard', 'Mouse', 'Webcam', 'Printer'
+      ],
+      'Fashion': [
+        'Shirt', 'Dress', 'Jeans', 'Shoes', 'Jacket', 'Watch', 'Necklace', 'Ring',
+        'Sneakers', 'Sunglasses', 'Handbag', 'Wallet', 'Belt', 'Scarf'
+      ],
+      'Home & Garden': [
+        'Furniture', 'Sofa', 'Table', 'Chair', 'Bed', 'Kitchen Appliance', 'Garden Tool',
+        'Plant', 'Lamp', 'Mirror', 'Cushion', 'Curtain', 'Rug', 'Vase'
+      ],
+      'Sports': [
+        'Football', 'Basketball', 'Tennis Racket', 'Gym Equipment', 'Fitness Tracker',
+        'Running Shoes', 'Sports Jersey', 'Water Bottle', 'Yoga Mat', 'Dumbbells'
+      ],
+      'Books': [
+        'Book', 'Novel', 'Textbook', 'Magazine', 'Comic', 'Dictionary', 'Encyclopedia',
+        'Biography', 'Fiction', 'Non-fiction', 'Poetry', 'Self-help'
+      ],
+      'Toys': [
+        'Toy', 'Lego Set', 'Doll', 'Board Game', 'Puzzle', 'Action Figure', 'Stuffed Animal',
+        'Building Blocks', 'Art Supplies', 'Educational Toy', 'Remote Control Car'
+      ]
+    }
+    
     for (let i = 0; i < count; i++) {
+      const category = categories[Math.floor(Math.random() * categories.length)]
+      const templates = productTemplates[category] || ['Product']
+      const template = templates[Math.floor(Math.random() * templates.length)]
+      
       const basePrice = 50 + Math.random() * 200
       const discount = Math.random() > 0.5 ? Math.random() * 30 : 0
       const price = basePrice - (basePrice * discount / 100)
       
+      // Create a more realistic product name
+      const brandNames = ['Premium', 'Elite', 'Pro', 'Max', 'Ultra', 'Smart', 'Advanced', 'Modern']
+      const brand = brandNames[Math.floor(Math.random() * brandNames.length)]
+      const productName = `${brand} ${template} ${i + 1}`
+      
       products.push({
         id: i + 1,
-        name: `Sample Product ${i + 1}`,
-        image: `https://picsum.photos/300/200?random=${i + 1}`,
+        name: productName,
+        image: `https://picsum.photos/300/200?random=${i + 1}`, // This will be overridden by ProductCard
         price: Math.round(price * 100) / 100,
         originalPrice: Math.round(basePrice * 100) / 100,
         retailer: retailers[Math.floor(Math.random() * retailers.length)],
@@ -50,7 +87,7 @@ const HomePage = () => {
         reviewCount: Math.floor(Math.random() * 1000) + 50,
         inStock: Math.random() > 0.2,
         discount: Math.round(discount),
-        category: categories[Math.floor(Math.random() * categories.length)]
+        category: category
       })
     }
     

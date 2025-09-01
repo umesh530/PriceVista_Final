@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useUser } from '../context/UserContext'
+import { getProductImage } from '../utils/productImageHelper'
 
 const ProductCard = ({ product }) => {
   const { isAuthenticated } = useUser()
@@ -16,11 +17,15 @@ const ProductCard = ({ product }) => {
     rating,
     reviewCount,
     inStock,
-    discount
+    discount,
+    category
   } = product
 
   const priceDifference = originalPrice - price
   const discountPercentage = Math.round((priceDifference / originalPrice) * 100)
+
+  // Get the appropriate image based on product name and category
+  const productImage = getProductImage(name, category)
 
   return (
     <motion.div 
@@ -33,9 +38,13 @@ const ProductCard = ({ product }) => {
       {/* Product Image */}
       <div className="relative mb-4 overflow-hidden rounded-lg">
         <img
-          src={image}
+          src={productImage}
           alt={name}
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            // Fallback to default image if the mapped image fails to load
+            e.target.src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop'
+          }}
         />
         {discount > 0 && (
           <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-lg">
