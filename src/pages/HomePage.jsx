@@ -138,32 +138,33 @@ const HomePage = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 bg-pattern">
       {/* Hero Section */}
-      <section className="relative overflow-hidden gradient-bg text-white py-20 lg:py-32">
+      <section className="relative overflow-hidden gradient-hero text-white py-20 lg:py-32">
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-20 h-20 bg-white rounded-full floating"></div>
-          <div className="absolute top-32 right-20 w-16 h-16 bg-white rounded-full floating" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-white rounded-full floating" style={{ animationDelay: '4s' }}></div>
-          <div className="absolute bottom-32 right-1/3 w-24 h-24 bg-white rounded-full floating" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white/20 rounded-full floating backdrop-blur-sm"></div>
+          <div className="absolute top-32 right-20 w-24 h-24 bg-white/20 rounded-full floating" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-white/20 rounded-full floating" style={{ animationDelay: '4s' }}></div>
+          <div className="absolute bottom-32 right-1/3 w-36 h-36 bg-white/20 rounded-full floating" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/10 rounded-full floating" style={{ animationDelay: '3s' }}></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h1 
-            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+            className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             Track Prices,{' '}
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+            <span className="gradient-text-hero">
               Save Money
             </span>
           </motion.h1>
           
           <motion.p 
-            className="text-xl md:text-2xl mb-8 text-gray-100 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl md:text-2xl mb-10 text-blue-100 max-w-4xl mx-auto leading-relaxed font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -173,7 +174,7 @@ const HomePage = () => {
           </motion.p>
           
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-6 justify-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -181,7 +182,7 @@ const HomePage = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 to="/search"
-                className="inline-block bg-white text-primary-600 hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl text-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="inline-block btn-glass font-semibold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:shadow-glow transform hover:scale-105 hover:-translate-y-1"
               >
                 Start Searching
               </Link>
@@ -189,7 +190,7 @@ const HomePage = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 to="/tracker"
-                className="inline-block border-2 border-white text-white hover:bg-white hover:text-primary-600 font-semibold py-4 px-8 rounded-xl text-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="inline-block bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 font-semibold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-glass hover:shadow-glow"
               >
                 Price Tracker
               </Link>
@@ -199,7 +200,7 @@ const HomePage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50 dark:bg-dark-800">
+      <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-dark-800 dark:to-dark-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -208,10 +209,10 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold gradient-text mb-6">
               Why Choose PriceVista?
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
               Powerful features designed to help you save money and make smarter purchasing decisions.
             </p>
           </motion.div>
@@ -227,11 +228,11 @@ const HomePage = () => {
                 whileHover={{ y: -10, scale: 1.02 }}
                 className="text-center group"
               >
-                <div className="bg-white dark:bg-dark-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-dark-600">
-                  <div className="bg-gradient-to-br from-primary-500 to-primary-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 text-white group-hover:scale-110 transition-transform duration-300">
+                <div className="glass-card p-8 hover:shadow-glow transition-all duration-300 dark:bg-dark-800/20 dark:border-dark-600/30">
+                  <div className="bg-gradient-to-br from-primary-500 via-secondary-500 to-accent-500 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 text-white group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                     {feature.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -245,7 +246,7 @@ const HomePage = () => {
       </section>
 
       {/* Featured Products */}
-      <section className="py-20 bg-white dark:bg-dark-900">
+      <section className="py-20 bg-white/50 dark:bg-dark-900/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -254,15 +255,15 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="flex justify-between items-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-4xl md:text-5xl font-bold gradient-text">
               Featured Products
             </h2>
             <Link
               to="/search"
-              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors duration-200 flex items-center group"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold transition-all duration-300 flex items-center group"
             >
               View All 
-              <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>
@@ -276,7 +277,7 @@ const HomePage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -5 }}
+                whileHover={{ y: -8 }}
               >
                 <ProductCard product={product} />
               </motion.div>
@@ -286,7 +287,7 @@ const HomePage = () => {
       </section>
 
       {/* Trending Products */}
-      <section className="py-20 bg-gray-50 dark:bg-dark-800">
+      <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-dark-800 dark:to-dark-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -295,15 +296,15 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="flex justify-between items-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-4xl md:text-5xl font-bold gradient-text">
               Trending Now
             </h2>
             <Link
               to="/search"
-              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors duration-200 flex items-center group"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold transition-all duration-300 flex items-center group"
             >
               View All 
-              <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>
@@ -317,7 +318,7 @@ const HomePage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -5 }}
+                whileHover={{ y: -8 }}
               >
                 <ProductCard product={product} />
               </motion.div>
@@ -327,11 +328,12 @@ const HomePage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 gradient-bg text-white relative overflow-hidden">
+      <section className="py-20 gradient-hero text-white relative overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 right-10 w-32 h-32 bg-white rounded-full floating"></div>
-          <div className="absolute bottom-10 left-10 w-24 h-24 bg-white rounded-full floating" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-10 right-10 w-40 h-40 bg-white/20 rounded-full floating"></div>
+          <div className="absolute bottom-10 left-10 w-32 h-32 bg-white/20 rounded-full floating" style={{ animationDelay: '3s' }}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/10 rounded-full floating" style={{ animationDelay: '2s' }}></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -341,16 +343,16 @@ const HomePage = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-8">
               Ready to Start Saving?
             </h2>
-            <p className="text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed font-light">
               Join thousands of smart shoppers who are already saving money with PriceVista.
             </p>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 to="/auth"
-                className="inline-block bg-white text-primary-600 hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl text-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="inline-block btn-glass font-semibold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:shadow-glow transform hover:scale-105 hover:-translate-y-1"
               >
                 Get Started Free
               </Link>

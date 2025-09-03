@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import PriceChart from '../components/PriceChart'
 import Loader from '../components/Loader'
+import ImmersiveViewer from '../components/ImmersiveViewer'
 
 const ProductDetail = () => {
   const { id } = useParams()
@@ -69,6 +70,11 @@ const ProductDetail = () => {
           <p className="text-gray-700 mb-6">{product.description}</p>
           <button className="btn-primary">Add to Cart</button>
         </div>
+      </div>
+      
+      {/* 360° Immersive Viewer */}
+      <div className="mb-8">
+        <ImmersiveViewer product={product} productId={product.id} />
       </div>
       
       <div className="mb-8">

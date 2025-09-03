@@ -5,13 +5,13 @@ import logo from "../assets/logo.jpg";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 dark:bg-dark-900 text-white border-t border-gray-700 dark:border-dark-700">
+    <footer className="bg-gradient-to-br from-dark-800 via-dark-900 to-dark-800 text-white border-t border-white/10 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
             <motion.div 
-              className="flex items-center mb-4"
+              className="flex items-center mb-6"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
@@ -21,16 +21,16 @@ const Footer = () => {
                 <img 
                   src={logo}
                   alt="PriceVista" 
-                  className="h-8 w-8 mr-2 rounded-lg"
+                  className="h-10 w-10 mr-3 rounded-2xl shadow-lg"
                 />
-                <div className="absolute inset-0 bg-primary-500/20 rounded-lg animate-pulse-slow"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/30 to-secondary-500/30 rounded-2xl animate-pulse-slow"></div>
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-primary-400 to-primary-500 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold gradient-text">
                 PriceVista
               </span>
             </motion.div>
             <motion.p 
-              className="text-gray-300 dark:text-gray-400 mb-6 max-w-md leading-relaxed"
+              className="text-gray-300 dark:text-gray-400 mb-8 max-w-md leading-relaxed text-lg"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -48,8 +48,8 @@ const Footer = () => {
             >
               <motion.a 
                 href="#" 
-                className="text-gray-400 hover:text-primary-400 transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700 dark:hover:bg-dark-700"
-                whileHover={{ scale: 1.1 }}
+                className="text-gray-400 hover:text-primary-400 transition-all duration-300 p-3 rounded-xl hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-primary-400/30"
+                whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.9 }}
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -58,8 +58,8 @@ const Footer = () => {
               </motion.a>
               <motion.a 
                 href="#" 
-                className="text-gray-400 hover:text-primary-400 transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700 dark:hover:bg-dark-700"
-                whileHover={{ scale: 1.1 }}
+                className="text-gray-400 hover:text-primary-400 transition-all duration-300 p-3 rounded-xl hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-primary-400/30"
+                whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.9 }}
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -68,8 +68,8 @@ const Footer = () => {
               </motion.a>
               <motion.a 
                 href="#" 
-                className="text-gray-400 hover:text-primary-400 transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700 dark:hover:bg-dark-700"
-                whileHover={{ scale: 1.1 }}
+                className="text-gray-400 hover:text-primary-400 transition-all duration-300 p-3 rounded-xl hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-primary-400/30"
+                whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.9 }}
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -86,26 +86,26 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
-            <ul className="space-y-3">
+            <h3 className="text-xl font-bold mb-6 gradient-text">Quick Links</h3>
+            <ul className="space-y-4">
               <li>
-                <Link to="/" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200 flex items-center group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Home</span>
+                <Link to="/" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-all duration-300 flex items-center group p-2 rounded-xl hover:bg-white/5">
+                  <span className="group-hover:translate-x-2 transition-transform duration-300 font-medium">Home</span>
                 </Link>
               </li>
               <li>
-                <Link to="/tracker" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200 flex items-center group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Price Tracker</span>
+                <Link to="/tracker" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-all duration-300 flex items-center group p-2 rounded-xl hover:bg-white/5">
+                  <span className="group-hover:translate-x-2 transition-transform duration-300 font-medium">Price Tracker</span>
                 </Link>
               </li>
               <li>
-                <Link to="/search" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200 flex items-center group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Search Products</span>
+                <Link to="/search" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-all duration-300 flex items-center group p-2 rounded-xl hover:bg-white/5">
+                  <span className="group-hover:translate-x-2 transition-transform duration-300 font-medium">Search Products</span>
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200 flex items-center group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">About Us</span>
+                <Link to="/about" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-all duration-300 flex items-center group p-2 rounded-xl hover:bg-white/5">
+                  <span className="group-hover:translate-x-2 transition-transform duration-300 font-medium">About Us</span>
                 </Link>
               </li>
             </ul>
@@ -118,26 +118,26 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-lg font-semibold mb-4 text-white">Support</h3>
-            <ul className="space-y-3">
+            <h3 className="text-xl font-bold mb-6 gradient-text">Support</h3>
+            <ul className="space-y-4">
               <li>
-                <Link to="/contact" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200 flex items-center group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Contact Us</span>
+                <Link to="/contact" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-all duration-300 flex items-center group p-2 rounded-xl hover:bg-white/5">
+                  <span className="group-hover:translate-x-2 transition-transform duration-300 font-medium">Contact Us</span>
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200 flex items-center group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Help Center</span>
+                <a href="#" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-all duration-300 flex items-center group p-2 rounded-xl hover:bg-white/5">
+                  <span className="group-hover:translate-x-2 transition-transform duration-300 font-medium">Help Center</span>
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200 flex items-center group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Privacy Policy</span>
+                <a href="#" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-all duration-300 flex items-center group p-2 rounded-xl hover:bg-white/5">
+                  <span className="group-hover:translate-x-2 transition-transform duration-300 font-medium">Privacy Policy</span>
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200 flex items-center group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Terms of Service</span>
+                <a href="#" className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-all duration-300 flex items-center group p-2 rounded-xl hover:bg-white/5">
+                  <span className="group-hover:translate-x-2 transition-transform duration-300 font-medium">Terms of Service</span>
                 </a>
               </li>
             </ul>
@@ -146,23 +146,23 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <motion.div 
-          className="border-t border-gray-700 dark:border-dark-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center"
+          className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
           viewport={{ once: true }}
         >
-          <p className="text-gray-400 dark:text-gray-500 text-sm">
+          <p className="text-gray-400 dark:text-gray-500 text-sm font-medium">
             © 2024 PriceVista. All rights reserved.
           </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="text-gray-400 dark:text-gray-500 hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors duration-200">
+          <div className="flex space-x-8 mt-4 md:mt-0">
+            <a href="#" className="text-gray-400 dark:text-gray-500 hover:text-primary-400 dark:hover:text-primary-300 text-sm font-medium transition-all duration-300 hover:scale-105">
               Privacy
             </a>
-            <a href="#" className="text-gray-400 dark:text-gray-500 hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors duration-200">
+            <a href="#" className="text-gray-400 dark:text-gray-500 hover:text-primary-400 dark:hover:text-primary-300 text-sm font-medium transition-all duration-300 hover:scale-105">
               Terms
             </a>
-            <a href="#" className="text-gray-400 dark:text-gray-500 hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors duration-200">
+            <a href="#" className="text-gray-400 dark:text-gray-500 hover:text-primary-400 dark:hover:text-primary-300 text-sm font-medium transition-all duration-300 hover:scale-105">
               Cookies
             </a>
           </div>
