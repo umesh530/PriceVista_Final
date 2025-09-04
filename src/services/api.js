@@ -69,5 +69,9 @@ class ApiService {
   }
 }
 
+
+export default axios.create({
+  baseURL: "http://localhost:5000/api", // or your deployed URL
+})
 export default new ApiService() 
 
