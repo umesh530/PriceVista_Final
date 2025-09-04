@@ -1,5 +1,17 @@
 import api from './api'
 
+
+
+export const searchProducts = async (query) => {
+  const res = await api.get(`/products/search?query=${query}`);
+  return res.data;
+};
+
+export const getProduct = async (id) => {
+  const res = await api.get(`/products/${id}`);
+  return res.data;
+};
+
 class ProductService {
   // Get all products with optional filters
   async getProducts(filters = {}) {
@@ -58,4 +70,9 @@ class ProductService {
   }
 }
 
+
+export const trackProduct = async (productId) => {
+  const res = await api.post("/products/track", { productId });
+  return res.data;
+};
 export default new ProductService() 

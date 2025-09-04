@@ -1,4 +1,11 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+import axios from "axios";
+
+
+const api = axios.create({
+  baseURL: "http://localhost:5000/api", // backend server
+  withCredentials: true,
+});
 
 class ApiService {
   constructor() {
@@ -63,3 +70,4 @@ class ApiService {
 }
 
 export default new ApiService() 
+
