@@ -42,6 +42,42 @@
     @apply bg-gradient-to-r from-primary-600 to-primary-700 dark:from-dark-800 dark:to-dark-900;
   }
 
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 dark:border-dark-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200;
+  }
+
+  .text-primary {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+
+  .text-secondary {
+    @apply text-gray-600 dark:text-gray-400;
+  }
+
+  .text-muted {
+    @apply text-gray-500 dark:text-gray-500;
+  }
+
+  .bg-primary {
+    @apply bg-white dark:bg-dark-900;
+  }
+
+  .bg-secondary {
+    @apply bg-gray-50 dark:bg-dark-800;
+  }
+
+  .bg-tertiary {
+    @apply bg-gray-100 dark:bg-dark-700;
+  }
+
+  .border-primary {
+    @apply border-gray-200 dark:border-dark-700;
+  }
+
+  .border-secondary {
+    @apply border-gray-300 dark:border-dark-600;
+  }
+
   .floating {
     animation: float 6s ease-in-out infinite;
   }

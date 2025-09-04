@@ -1,6 +1,6 @@
 /* Additional global styles beyond TailwindCSS */
 
-/* Custom scrollbar */
+/* Custom scrollbar - Light theme */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -18,6 +18,19 @@
   background: #a8a8a8;
 }
 
+/* Custom scrollbar - Dark theme */
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
 /* Smooth transitions */
 * {
   transition: all 0.2s ease-in-out;
@@ -29,6 +42,10 @@
   outline-offset: 2px;
 }
 
+.dark .focus-ring:focus {
+  outline-color: #60a5fa;
+}
+
 /* Loading animation */
 @keyframes spin {
   to {
@@ -38,4 +55,25 @@
 
 .animate-spin {
   animation: spin 1s linear infinite;
+}
+
+/* Theme transition animations */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Enhanced dark mode styles */
+.dark {
+  color-scheme: dark;
+}
+
+/* Selection colors */
+::selection {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.dark ::selection {
+  background-color: #60a5fa;
+  color: #0f172a;
 } 
