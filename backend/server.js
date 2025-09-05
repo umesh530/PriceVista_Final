@@ -32,9 +32,7 @@ app.use(
 app.get("/", (_req, res) => res.send("PriceVista Backend Running 🚀"));
 
 // routes
-app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/products", require("./routes/productRoutes"));
-app.use("/api/alerts", require("./routes/alertRoutes"));
+app.use("/api", require("./routes/index"));
 
 // errors
 app.use(notFound);
