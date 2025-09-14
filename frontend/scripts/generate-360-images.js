@@ -1,0 +1,133 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Create the products/360 directory if it doesn't exist
+const productsDir = path.join(__dirname, '../public/products/360');
+if (!fs.existsSync(productsDir)) {
+  fs.mkdirSync(productsDir, { recursive: true });
+}
+
+// Generate sample 360-degree images for a laptop product
+const productId = 'laptop';
+const totalImages = 36;
+
+console.log(`Generating ${totalImages} sample 360° images for product: ${productId}`);
+
+// Create a simple HTML file that generates the images using canvas
+const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate 360° Images</title>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="300" style="border: 1px solid #ccc;"></canvas>
+    <div id="status"></div>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const status = document.getElementById('status');
+        
+        function generateImage(angle, index) {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set background
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw a simple 3D laptop representation
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Calculate rotation
+            const rad = (angle * Math.PI) / 180;
+            const cos = Math.cos(rad);
+            const sin = Math.sin(rad);
+            
+            // Draw laptop base
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(rad);
+            
+            // Base rectangle
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(-80, -50, 160, 100);
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-80, -50, 160, 100);
+            
+            // Screen (perspective effect based on angle)
+            const screenHeight = 60 + Math.abs(cos) * 20;
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(-70, -80, 140, screenHeight);
+            ctx.strokeStyle = '#475569';
+            ctx.strokeRect(-70, -80, 140, screenHeight);
+            
+            // Screen content
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillRect(-60, -70, 120, screenHeight - 20);
+            
+            // Keyboard
+            ctx.fillStyle = '#64748b';
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 4; j++) {
+                    ctx.fillRect(-60 + i * 15, -30 + j * 12, 12, 8);
+                }
+            }
+            
+            // Trackpad
+            ctx.fillStyle = '#94a3b8';
+            ctx.fillRect(-40, 20, 80, 20);
+            
+            ctx.restore();
+            
+            // Add angle indicator
+            ctx.fillStyle = '#64748b';
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(\`\${angle}°\`, centerX, 30);
+            
+            // Add product info
+            ctx.fillStyle = '#475569';
+            ctx.font = '14px Arial';
+            ctx.fillText('Sample Laptop', centerX, canvas.height - 20);
+            
+            // Convert to blob and download
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = \`\${productId}-\${index + 1}.jpg\`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                status.textContent = \`Generated image \${index + 1}/\${totalImages}: \${angle}°\`;
+                
+                if (index < totalImages - 1) {
+                    setTimeout(() => generateImage(angle + 10, index + 1), 100);
+                } else {
+                    status.textContent = 'All images generated successfully!';
+                }
+            }, 'image/jpeg', 0.9);
+        }
+        
+        // Start generating images
+        generateImage(0, 0);
+    </script>
+</body>
+</html>
+`;
+
+const htmlPath = path.join(__dirname, 'generate-images.html');
+fs.writeFileSync(htmlPath, htmlContent);
+
+console.log(`HTML file created at: ${htmlPath}`);
+console.log('Open this file in a browser to generate the 360° images.');
+console.log('The images will be automatically downloaded to your Downloads folder.');
+console.log('Move them to: public/products/360/');
