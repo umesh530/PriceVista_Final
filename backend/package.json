@@ -1,7 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
+<<<<<<< HEAD
   "main": "server.js",
+=======
+  "main": "index.js",
+>>>>>>> 39ccbccd79c45137d0fd162eb7c279fe1195db4f
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
