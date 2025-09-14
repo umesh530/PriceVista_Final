@@ -1,0 +1,3 @@
+# This is a placeholder file for testing the 360-degree viewer
+# In a real implementation, this would be an actual JPEG image
+# For now, we'll use the fallback functionality to test the component
