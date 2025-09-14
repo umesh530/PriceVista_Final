@@ -49,7 +49,7 @@ const PriceTracker = () => {
     return <Loader fullScreen text="Loading tracked products..." />
   }
 
-  // Bubble styles
+  // New bubble styles
   const bubbleStyles = [
     { width: 80, height: 80, left: 40, bottom: 60, background: 'rgba(255,255,255,0.15)', animation: 'bubbleMove1 12s linear infinite' },
     { width: 120, height: 120, right: 120, top: 40, background: 'rgba(255,255,255,0.10)', animation: 'bubbleMove2 14s linear infinite' },
@@ -100,7 +100,7 @@ const PriceTracker = () => {
         Price Tracker
       </motion.h1>
 
-      {/* Product grid with animations */}
+      {/* Product grid */}
       {trackedProducts.length > 0 ? (
         <motion.div
           className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 z-10"
@@ -110,35 +110,19 @@ const PriceTracker = () => {
             hidden: { opacity: 0 },
             show: {
               opacity: 1,
-              transition: { staggerChildren: 0.3 }
+              transition: { staggerChildren: 0.2 }
             }
           }}
         >
-          {trackedProducts.map((product, i) => (
+          {trackedProducts.map((product) => (
             <motion.div
               key={product.id}
-              className="product-card-wrapper"
               variants={{
-                hidden: { opacity: 0, scale: 0.8, y: 50 },
-                show: { opacity: 1, scale: 1, y: 0 }
+                hidden: { opacity: 0, y: 30 },
+                show: { opacity: 1, y: 0 }
               }}
-              whileHover={{
-                scale: 1.08,
-                rotateX: 5,
-                rotateY: -5,
-                boxShadow: '0px 8px 25px rgba(0, 150, 255, 0.6)'
-              }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05, rotate: 1 }}
               transition={{ type: 'spring', stiffness: 200 }}
-              animate={{
-                y: [0, -8, 0], // floating animation
-              }}
-              transition={{
-                repeat: Infinity,
-                repeatType: 'mirror',
-                duration: 4,
-                ease: 'easeInOut'
-              }}
             >
               <ProductCard product={product} />
             </motion.div>
