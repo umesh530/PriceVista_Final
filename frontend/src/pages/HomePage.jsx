@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import ProductCard from '../components/ProductCard'
 import Loader from '../components/Loader'
 
+
 const HomePage = () => {
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [trendingProducts, setTrendingProducts] = useState([])
