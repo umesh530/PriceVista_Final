@@ -1,49 +1,55 @@
+// backend/server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db');
-const errorHandler = require('./utils/errorHandler');
+const cron = require('node-cron');
 
+// connect to DB (must be before routes that use models)
+const connectDB = require('./config/db');
+connectDB();
+
+// create app AFTER loading config & connecting DB
+const app = express();
+
+// middleware
+app.use(cors({
+  origin: process.env.FRONTEND_ORIGIN || 'http://localhost:3000'
+}));
+app.use(express.json()); // parse JSON
+
+// routes - require after app is created (order of requires doesn't matter much,
+// but ensure route modules DO NOT import server.js back — see circular note below)
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const alertRoutes = require('./routes/alertRoutes');
+const adminRoutes = require('./routes/adminRoutes'); // admin routes (protected)
 
-const app = express();
-connectDB();
-
-app.use(cors());
-app.use(express.json());
-
-// API routes
+// mount routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/alerts', alertRoutes);
+app.use('/api/admin', adminRoutes);
 
-// health check
+// simple health-check
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
-// error handler (last middleware)
+// centralized error handler (must be after routes)
+const errorHandler = require('./utils/errorHandler');
 app.use(errorHandler);
 
+// start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// OPTIONAL: start a cron job that runs priceTracker periodically
+// price tracker cron job (optional): run hourly (adjust as needed)
 const priceTracker = require('./services/priceTracker');
-const cron = require('node-cron');
-// every hour: adjust as needed
 cron.schedule('0 * * * *', async () => {
-  console.log('Running price tracker cron job');
+  console.log('Running price tracker job');
   try {
     await priceTracker.scanAndUpdateAllProducts();
   } catch (err) {
-    console.error('Price tracker error:', err);
+    console.error('Price tracker failed:', err);
   }
 });
-
-// server.js
-app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN || 'http://localhost:3000',
-}));
