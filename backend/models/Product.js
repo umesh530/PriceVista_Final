@@ -1,10 +1,24 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const productSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  url: { type: String, required: true },
+const PricePointSchema = new mongoose.Schema({
   price: { type: Number, required: true },
-  lastChecked: { type: Date, default: Date.now },
-}, { timestamps: true });
+  date: { type: Date, default: Date.now },
+  store: { type: String } // e.g., 'Amazon'
+});
 
-module.exports = mongoose.model("Product", productSchema);
+const ProductSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: String,
+  images: [String],
+  // a canonical product url for scraping/comparison
+  sourceUrl: { type: String, required: true },
+  source: { type: String }, // e.g., 'amazon'
+  currentPrice: { type: Number, required: true },
+  currency: { type: String, default: 'INR' },
+  priceHistory: [PricePointSchema],
+  retailer: String,
+  inStock: { type: Boolean, default: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Product', ProductSchema);

@@ -1,55 +1,76 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+// frontend/src/context/UserContext.jsx
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import * as userService from '../services/userService';
 
-const UserContext = createContext()
+const UserContext = createContext();
 
-export const useUser = () => {
-  const context = useContext(UserContext)
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider')
-  }
-  return context
-}
+export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    // Check if user is logged in from localStorage
-    const savedUser = localStorage.getItem('user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
+  const [user, setUser] = useState(() => {
+    try {
+      const raw = localStorage.getItem('pv_user');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
     }
-    setLoading(false)
-  }, [])
+  });
+  const [loading, setLoading] = useState(false);
 
-  const login = (userData) => {
-    setUser(userData)
-    localStorage.setItem('user', JSON.stringify(userData))
-  }
+  // login: accepts credentials { email, password }
+  const login = async (creds) => {
+    setLoading(true);
+    try {
+      const data = await userService.login(creds);
+      setUser(data);
+      localStorage.setItem('pv_user', JSON.stringify(data));
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, message: err?.response?.data?.message || err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // register: { name, email, password }
+  const register = async (payload) => {
+    setLoading(true);
+    try {
+      const data = await userService.register(payload);
+      setUser(data);
+      localStorage.setItem('pv_user', JSON.stringify(data));
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, message: err?.response?.data?.message || err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const logout = () => {
-    setUser(null)
-    localStorage.removeItem('user')
-  }
+    setUser(null);
+    localStorage.removeItem('pv_user');
+  };
 
-  const updateUser = (userData) => {
-    setUser(userData)
-    localStorage.setItem('user', JSON.stringify(userData))
-  }
-
-  const value = {
-    user,
-    loading,
-    login,
-    logout,
-    updateUser,
-    isAuthenticated: !!user
-  }
+  // optional: refresh profile on mount if token exists
+  useEffect(() => {
+    const tryRefresh = async () => {
+      if (!user?.token) return;
+      try {
+        const profile = await userService.getProfile();
+        setUser(prev => ({ ...prev, ...profile }));
+      } catch (e) {
+        // token invalid -> logout
+        logout();
+      }
+    };
+    tryRefresh();
+    // eslint-disable-next-line
+  }, []);
 
   return (
-    <UserContext.Provider value={value}>
+    <UserContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </UserContext.Provider>
-  )
-} 
+  );
+};

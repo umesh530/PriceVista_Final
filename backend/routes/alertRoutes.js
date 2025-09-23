@@ -1,10 +1,12 @@
-const express = require("express");
-const { createAlert, getAlerts } = require("../controllers/alertController");
-const { protect } = require("../middleware/authMiddleware");
-
+const express = require('express');
 const router = express.Router();
+const { createAlert, getAlertsForUser, updateAlert, deleteAlert } = require('../controllers/alertController');
+const { protect } = require('../middleware/authMiddleware');
 
-router.post("/", protect, createAlert);
-router.get("/", protect, getAlerts);
+router.use(protect);
+router.post('/', createAlert);
+router.get('/', getAlertsForUser);
+router.put('/:id', updateAlert);
+router.delete('/:id', deleteAlert);
 
 module.exports = router;
