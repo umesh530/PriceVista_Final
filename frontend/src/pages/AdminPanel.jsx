@@ -49,7 +49,8 @@ const AdminPanel = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
         <p className="text-gray-600">Welcome back, {user.name}. Here's your dashboard overview.</p>
@@ -174,8 +175,10 @@ const AdminPanel = () => {
           </div>
         </div>
       </div>
+      </div>
     </div>
   )
 }
 
 export default AdminPanel 
+

@@ -30,11 +30,29 @@ app.use('/api/products', productRoutes);
 app.use('/api/alerts', alertRoutes);
 app.use('/api/admin', adminRoutes);
 
+<<<<<<< HEAD
 // simple health-check
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
 // centralized error handler (must be after routes)
 const errorHandler = require('./utils/errorHandler');
+=======
+ HEAD
+ HEAD
+// health
+app.get("/", (_req, res) => res.send("PriceVista Backend Running 🚀"));
+
+// routes
+app.use("/api", require("./routes/index"));
+
+// errors
+app.use(notFound);
+// Error handler 2c94dc48dd71901b9435effcd20b6814dfb1ee29
+// health check
+app.get('/api/health', (req, res) => res.json({ ok: true }));
+
+// error handler (last middleware) 8c981bead91cb951793537947e8fb1695e43f586
+>>>>>>> 0473af722efc8502a18f0cc323fe4c4eaf184f64
 app.use(errorHandler);
 
 // start server

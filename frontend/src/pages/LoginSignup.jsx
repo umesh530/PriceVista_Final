@@ -1,208 +1,194 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useUser } from "../context/UserContext"
+import { useTheme } from "../context/ThemeContext"
+import { motion } from "framer-motion"
 
 const LoginSignup = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    name: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const { login } = useUser();
-  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(true)
+  const [formData, setFormData] = useState({ email: "", password: "", name: "" })
+  const [loading, setLoading] = useState(false)
+  const { login } = useUser()
+  const { isDark } = useTheme()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
+    e.preventDefault()
+    setLoading(true)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
+      await new Promise((resolve) => setTimeout(resolve, 1500))
       if (isLogin) {
-        login({ email: formData.email, name: formData.email.split("@")[0] });
+        login({ email: formData.email, name: formData.email.split("@")[0] })
       } else {
-        login({ email: formData.email, name: formData.name });
+        login({ email: formData.email, name: formData.name })
       }
-
-      navigate("/dashboard");
+      navigate("/dashboard")
     } catch (error) {
-      console.error("Authentication failed:", error);
+      console.error("Authentication failed:", error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleInputChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
-    }));
-  };
+    }))
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-animate">
-      {/* Floating glowing circles */}
-      <div className="absolute w-72 h-72 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-float top-10 left-10"></div>
-      <div className="absolute w-96 h-96 bg-indigo-600 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-float-delay bottom-10 right-10"></div>
-
-      {/* Card */}
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background */}
       <div
-        className="relative z-10 max-w-md w-full bg-white/95 p-8 rounded-2xl shadow-2xl 
-                   animate-fade-in transform transition duration-500 hover:scale-105 hover:shadow-indigo-500/50"
-      >
-        <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-6 transition-all duration-500">
-          {isLogin ? "Sign in to your account" : "Create your account"}
-        </h2>
+        className={`absolute inset-0 transition-colors duration-500 ${
+          isDark
+            ? "bg-gradient-to-r from-gray-900 via-black to-gray-900"
+            : "bg-gradient-to-r from-blue-800 via-purple-500 to-blue-800"
+        }`}
+      />
 
-        <form
-          className={`space-y-6 transform transition-all duration-500 ${
-            isLogin ? "animate-slide-in-left" : "animate-slide-in-right"
-          }`}
-          onSubmit={handleSubmit}
-        >
-          <div className="space-y-4">
+      {/* Card Container */}
+      <motion.div
+        className={`relative w-full max-w-4xl flex rounded-2xl overflow-hidden shadow-2xl ${
+          isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+        }`}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        {/* Left Form Section */}
+        <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
+          <div className="text-center mb-6">
+            <h1
+              className={`text-4xl font-bold ${
+                isDark ? "text-white" : "text-black"
+              }`}
+            >
+              PriceVista
+            </h1>
+          </div>
+
+          <motion.h2
+            className="text-3xl font-semibold mb-6 text-center"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            {isLogin ? "Login" : "Sign Up"}
+          </motion.h2>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Full Name
-                </label>
+                <label className="block text-lg font-medium mb-2">Full Name</label>
                 <input
-                  id="name"
-                  name="name"
                   type="text"
-                  required={!isLogin}
+                  name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 
-                             rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  required
+                  className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
+                    isDark
+                      ? "bg-gray-800 border-gray-600 text-white"
+                      : "bg-white border-gray-400 text-gray-900"
+                  }`}
                 />
               </div>
             )}
 
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email address
-              </label>
+              <label className="block text-lg font-medium mb-2">Email</label>
               <input
-                id="email"
-                name="email"
                 type="email"
-                required
+                name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 
-                           rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                required
+                className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
+                  isDark
+                    ? "bg-gray-800 border-gray-600 text-white"
+                    : "bg-white border-gray-400 text-gray-900"
+                }`}
               />
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
+              <label className="block text-lg font-medium mb-2">Password</label>
               <input
-                id="password"
-                name="password"
                 type="password"
-                required
+                name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 
-                           rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                required
+                className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
+                  isDark
+                    ? "bg-gray-800 border-gray-600 text-white"
+                    : "bg-white border-gray-400 text-gray-900"
+                }`}
               />
             </div>
-          </div>
 
-          <div>
-            <button
+            {/* Black Gradient Login Button */}
+            <motion.button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md 
-                         hover:bg-indigo-700 focus:outline-none focus:ring-2 
-                         focus:ring-indigo-500 focus:ring-offset-1 disabled:opacity-50 transition-all duration-300"
+              className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-black to-gray-700 hover:from-gray-800 hover:to-black transition-all duration-200 shadow-lg"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
             >
-              {loading ? "Processing..." : isLogin ? "Sign In" : "Sign Up"}
-            </button>
+              {loading ? "Processing..." : isLogin ? "Login" : "Sign Up"}
+            </motion.button>
+          </form>
+
+          <div className="mt-6 text-center text-sm">
+            {isLogin ? (
+              <p>
+                Don’t have an account?{" "}
+                <button
+                  onClick={() => setIsLogin(false)}
+                  className="text-blue-600 font-medium hover:underline"
+                >
+                  Sign Up
+                </button>
+              </p>
+            ) : (
+              <p>
+                Already have an account?{" "}
+                <button
+                  onClick={() => setIsLogin(true)}
+                  className="text-blue-600 font-medium hover:underline"
+                >
+                  Login
+                </button>
+              </p>
+            )}
           </div>
-        </form>
-
-        <div className="text-center mt-6">
-          <button
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-indigo-600 hover:text-indigo-500 transition-colors duration-300"
-          >
-            {isLogin
-              ? "Don't have an account? Sign up"
-              : "Already have an account? Sign in"}
-          </button>
         </div>
-      </div>
 
-      {/* Animations */}
-      <style>{`
-        /* Background gradient animation */
-        .bg-gradient-animate {
-          background: linear-gradient(135deg, black, #1e3a8a, #2563eb);
-          background-size: 300% 300%;
-          animation: gradientShift 8s ease infinite;
-        }
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
+        {/* White gradient border + Right Section */}
+        <div className="hidden md:flex w-1/2 relative">
+          {/* White gradient "border" between sections */}
+          <div className="absolute left-0 top-0 h-full w-2 bg-gradient-to-b from-white via-white to-white" />
 
-        /* Floating blobs */
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          50% { transform: translateY(-20px) translateX(20px); }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        .animate-float-delay {
-          animation: float 7s ease-in-out infinite;
-        }
-
-        /* Form fade-in */
-        @keyframes fade-in {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-in-out;
-        }
-
-        /* Slide-in left */
-        @keyframes slide-in-left {
-          from { opacity: 0; transform: translateX(-40px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .animate-slide-in-left {
-          animation: slide-in-left 0.6s ease-in-out;
-        }
-
-        /* Slide-in right */
-        @keyframes slide-in-right {
-          from { opacity: 0; transform: translateX(40px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .animate-slide-in-right {
-          animation: slide-in-right 0.6s ease-in-out;
-        }
-      `}</style>
+          <div
+            className={`flex-1 flex items-center justify-center p-10 ${
+              isDark
+                ? "bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white"
+                : "bg-gradient-to-r from-blue-800 via-purple-500 to-blue-800 text-white"
+            }`}
+          >
+            <div className="text-center">
+              <h3 className="text-4xl font-bold mb-4">WELCOME BACK!</h3>
+              <p className="text-lg leading-relaxed text-white/90">
+                Track your prices, save your money, and stay ahead with PriceVista.
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginSignup;
+export default LoginSignup
