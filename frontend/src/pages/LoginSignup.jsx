@@ -1,145 +1,194 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useUser } from "../context/UserContext"
+import { useTheme } from "../context/ThemeContext"
+import { motion } from "framer-motion"
 
-export default function LoginSignup() {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+const LoginSignup = () => {
+  const [isLogin, setIsLogin] = useState(true)
+  const [formData, setFormData] = useState({ email: "", password: "", name: "" })
+  const [loading, setLoading] = useState(false)
+  const { login } = useUser()
+  const { isDark } = useTheme()
+  const navigate = useNavigate()
 
-  const [focusedField, setFocusedField] = useState(null);
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      if (isLogin) {
+        login({ email: formData.email, name: formData.email.split("@")[0] })
+      } else {
+        login({ email: formData.email, name: formData.name })
+      }
+      navigate("/dashboard")
+    } catch (error) {
+      console.error("Authentication failed:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your login/signup logic here
-  };
+    }))
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background */}
+      <div
+        className={`absolute inset-0 transition-colors duration-500 ${
+          isDark
+            ? "bg-gradient-to-r from-gray-900 via-black to-gray-900"
+            : "bg-gradient-to-r from-blue-800 via-purple-500 to-blue-800"
+        }`}
+      />
+
+      {/* Card Container */}
       <motion.div
-        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md"
-        initial={{ opacity: 0, scale: 0.8, y: 50 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        className={`relative w-full max-w-4xl flex rounded-2xl overflow-hidden shadow-2xl ${
+          isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+        }`}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Create Account
-        </h2>
+        {/* Left Form Section */}
+        <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
+          <div className="text-center mb-6">
+            <h1
+              className={`text-4xl font-bold ${
+                isDark ? "text-white" : "text-black"
+              }`}
+            >
+              PriceVista
+            </h1>
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Username */}
-          <motion.label
-            htmlFor="username"
-            className="block text-gray-700"
-            initial={{ opacity: 0, y: -10 }}
+          <motion.h2
+            className="text-3xl font-semibold mb-6 text-center"
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ delay: 0.3 }}
           >
-            Username
-            <motion.input
-              type="text"
-              id="username"
-              name="username"
-              required
-              value={formData.username}
-              onChange={handleInputChange}
-              onFocus={() => setFocusedField("username")}
-              onBlur={() => setFocusedField(null)}
-              whileFocus={{ scale: 1.02 }}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </motion.label>
+            {isLogin ? "Login" : "Sign Up"}
+          </motion.h2>
 
-          {/* Email */}
-          <motion.label
-            htmlFor="email"
-            className="block text-gray-700"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-          >
-            Email Address
-            <motion.input
-              type="email"
-              id="email"
-              name="email"
-              required
-              value={formData.email}
-              onChange={handleInputChange}
-              onFocus={() => setFocusedField("email")}
-              onBlur={() => setFocusedField(null)}
-              whileFocus={{ scale: 1.02 }}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </motion.label>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {!isLogin && (
+              <div>
+                <label className="block text-lg font-medium mb-2">Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
+                    isDark
+                      ? "bg-gray-800 border-gray-600 text-white"
+                      : "bg-white border-gray-400 text-gray-900"
+                  }`}
+                />
+              </div>
+            )}
 
-          {/* Password */}
-          <motion.label
-            htmlFor="password"
-            className="block text-gray-700"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-          >
-            Password
-            <motion.input
-              type="password"
-              id="password"
-              name="password"
-              required
-              value={formData.password}
-              onChange={handleInputChange}
-              onFocus={() => setFocusedField("password")}
-              onBlur={() => setFocusedField(null)}
-              whileFocus={{ scale: 1.02 }}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </motion.label>
+            <div>
+              <label className="block text-lg font-medium mb-2">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
+                  isDark
+                    ? "bg-gray-800 border-gray-600 text-white"
+                    : "bg-white border-gray-400 text-gray-900"
+                }`}
+              />
+            </div>
 
-          {/* Confirm Password */}
-          <motion.label
-            htmlFor="confirmPassword"
-            className="block text-gray-700"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-          >
-            Confirm Password
-            <motion.input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              required
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              onFocus={() => setFocusedField("confirmPassword")}
-              onBlur={() => setFocusedField(null)}
-              whileFocus={{ scale: 1.02 }}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </motion.label>
+            <div>
+              <label className="block text-lg font-medium mb-2">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
+                  isDark
+                    ? "bg-gray-800 border-gray-600 text-white"
+                    : "bg-white border-gray-400 text-gray-900"
+                }`}
+              />
+            </div>
 
-          {/* Submit Button */}
-          <motion.button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg mt-4 font-semibold shadow-md"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            {/* Black Gradient Login Button */}
+            <motion.button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-black to-gray-700 hover:from-gray-800 hover:to-black transition-all duration-200 shadow-lg"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              {loading ? "Processing..." : isLogin ? "Login" : "Sign Up"}
+            </motion.button>
+          </form>
+
+          <div className="mt-6 text-center text-sm">
+            {isLogin ? (
+              <p>
+                Don’t have an account?{" "}
+                <button
+                  onClick={() => setIsLogin(false)}
+                  className="text-blue-600 font-medium hover:underline"
+                >
+                  Sign Up
+                </button>
+              </p>
+            ) : (
+              <p>
+                Already have an account?{" "}
+                <button
+                  onClick={() => setIsLogin(true)}
+                  className="text-blue-600 font-medium hover:underline"
+                >
+                  Login
+                </button>
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* White gradient border + Right Section */}
+        <div className="hidden md:flex w-1/2 relative">
+          {/* White gradient "border" between sections */}
+          <div className="absolute left-0 top-0 h-full w-2 bg-gradient-to-b from-white via-white to-white" />
+
+          <div
+            className={`flex-1 flex items-center justify-center p-10 ${
+              isDark
+                ? "bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white"
+                : "bg-gradient-to-r from-blue-800 via-purple-500 to-blue-800 text-white"
+            }`}
           >
-            Sign Up
-          </motion.button>
-        </form>
+            <div className="text-center">
+              <h3 className="text-4xl font-bold mb-4">WELCOME BACK!</h3>
+              <p className="text-lg leading-relaxed text-white/90">
+                Track your prices, save your money, and stay ahead with PriceVista.
+              </p>
+            </div>
+          </div>
+        </div>
       </motion.div>
     </div>
-  );
+  )
 }
+
+export default LoginSignup

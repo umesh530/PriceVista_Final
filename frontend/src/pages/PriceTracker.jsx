@@ -62,13 +62,14 @@ const PriceTracker = () => {
 
   return (
     <div
-      className="
+      className={`
         relative w-full min-h-screen overflow-hidden px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32 py-8
-        flex flex-col items-center
-        bg-gradient-to-br from-[#5ba3f7] via-[#4b5be5] to-[#5b4be5]
-        dark:bg-gradient-to-br dark:from-[#232a3d] dark:to-[#111624]
-        text-white mt-16
-      "
+        flex flex-col items-center text-white mt-16 transition-all duration-500
+        ${darkMode 
+          ? 'bg-gradient-to-r from-slate-900 via-gray-900 to-black' 
+          : 'bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600'
+        }
+      `}
     >
       {/* Animated bubbles */}
       {bubbleStyles.map((style, idx) => (

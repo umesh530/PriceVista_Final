@@ -47,7 +47,8 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16">
+    <div className="min-h-screen bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         <div>
           <img
@@ -74,6 +75,7 @@ const ProductDetail = () => {
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Price History</h2>
         <PriceChart productId={product.id} />
+      </div>
       </div>
     </div>
   )

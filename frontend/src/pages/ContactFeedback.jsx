@@ -35,7 +35,7 @@ const ContactFeedback = () => {
 
   return (
     <div
-      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 to-blue-600 dark:from-gray-900 dark:to-gray-950 overflow-hidden mt-16"
+      className="relative min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 overflow-hidden mt-16"
     >
       
       {/* Floating Background Bubbles */}
