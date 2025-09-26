@@ -38,37 +38,24 @@ const LoginSignup = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Background */}
-      <div
-        className={`absolute inset-0 transition-colors duration-500 ${
-          isDark
-            ? "bg-gradient-to-r from-gray-900 via-black to-gray-900"
-            : "bg-gradient-to-r from-blue-800 via-purple-500 to-blue-800"
-        }`}
-      />
-
+    <div
+      className={`min-h-screen flex items-center justify-center px-4 transition-colors duration-500 ${
+        isDark
+          ? "bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white"
+          : "bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 text-gray-900"
+      }`}
+    >
       {/* Card Container */}
       <motion.div
-        className={`relative w-full max-w-4xl flex rounded-2xl overflow-hidden shadow-2xl ${
-          isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+        className={`relative w-full max-w-4xl flex rounded-2xl overflow-hidden shadow-2xl border ${
+          isDark ? "bg-gray-900/90 border-gray-700" : "bg-white border-gray-300"
         }`}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         {/* Left Form Section */}
-        <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
-          <div className="text-center mb-6">
-            <h1
-              className={`text-4xl font-bold ${
-                isDark ? "text-white" : "text-black"
-              }`}
-            >
-              PriceVista
-            </h1>
-          </div>
-
+        <div className="w-full md:w-1/2 p-10 flex flex-col justify-center bg-white text-gray-900">
           <motion.h2
             className="text-3xl font-semibold mb-6 text-center"
             initial={{ opacity: 0, y: -20 }}
@@ -81,59 +68,50 @@ const LoginSignup = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div>
-                <label className="block text-lg font-medium mb-2">Full Name</label>
+                <label className="block text-lg mb-2 font-medium">Full Name</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
-                    isDark
-                      ? "bg-gray-800 border-gray-600 text-white"
-                      : "bg-white border-gray-400 text-gray-900"
-                  }`}
+                  className="w-full px-4 py-3 rounded-lg bg-transparent border-2 border-pink-400 focus:ring-2 focus:ring-pink-500 outline-none"
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-lg font-medium mb-2">Email</label>
+              <label className="block text-lg mb-2 font-medium">Email</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
-                  isDark
-                    ? "bg-gray-800 border-gray-600 text-white"
-                    : "bg-white border-gray-400 text-gray-900"
-                }`}
+                className="w-full px-4 py-3 rounded-lg bg-transparent border-2 border-pink-400 focus:ring-2 focus:ring-pink-500 outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-lg font-medium mb-2">Password</label>
+              <label className="block text-lg mb-2 font-medium">Password</label>
               <input
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
                 required
-                className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-pink-500 outline-none ${
-                  isDark
-                    ? "bg-gray-800 border-gray-600 text-white"
-                    : "bg-white border-gray-400 text-gray-900"
-                }`}
+                className="w-full px-4 py-3 rounded-lg bg-transparent border-2 border-pink-400 focus:ring-2 focus:ring-pink-500 outline-none"
               />
             </div>
 
-            {/* Black Gradient Login Button */}
             <motion.button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-black to-gray-700 hover:from-gray-800 hover:to-black transition-all duration-200 shadow-lg"
+              className={`w-full py-3 rounded-lg font-semibold text-white transition-all duration-200 shadow-lg ${
+                isDark
+                  ? "bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-900 hover:to-gray-700"
+                  : "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 hover:from-pink-600 hover:to-blue-600"
+              }`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -141,13 +119,14 @@ const LoginSignup = () => {
             </motion.button>
           </form>
 
+          {/* Toggle Link */}
           <div className="mt-6 text-center text-sm">
             {isLogin ? (
               <p>
                 Don’t have an account?{" "}
                 <button
                   onClick={() => setIsLogin(false)}
-                  className="text-blue-600 font-medium hover:underline"
+                  className="text-blue-600 hover:underline"
                 >
                   Sign Up
                 </button>
@@ -157,7 +136,7 @@ const LoginSignup = () => {
                 Already have an account?{" "}
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="text-blue-600 font-medium hover:underline"
+                  className="text-blue-600 hover:underline"
                 >
                   Login
                 </button>
@@ -166,21 +145,21 @@ const LoginSignup = () => {
           </div>
         </div>
 
-        {/* White gradient border + Right Section */}
+        {/* Right Info Section with Gradient Divider */}
         <div className="hidden md:flex w-1/2 relative">
-          {/* White gradient "border" between sections */}
-          <div className="absolute left-0 top-0 h-full w-2 bg-gradient-to-b from-white via-white to-white" />
+          {/* Gradient white divider */}
+          <div className="absolute left-0 top-0 h-full w-[4px] bg-gradient-to-b from-transparent via-white to-transparent opacity-70" />
 
           <div
             className={`flex-1 flex items-center justify-center p-10 ${
               isDark
                 ? "bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white"
-                : "bg-gradient-to-r from-blue-800 via-purple-500 to-blue-800 text-white"
+                : "bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 text-white"
             }`}
           >
             <div className="text-center">
-              <h3 className="text-4xl font-bold mb-4">WELCOME BACK!</h3>
-              <p className="text-lg leading-relaxed text-white/90">
+              <h3 className="text-5xl font-extrabold mb-4">PriceVista</h3>
+              <p className="text-xl leading-relaxed text-white/90">
                 Track your prices, save your money, and stay ahead with PriceVista.
               </p>
             </div>

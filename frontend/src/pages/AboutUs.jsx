@@ -1,119 +1,99 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useTheme } from "../context/ThemeContext"
 
-const bubbleStyles = [
-  { width: 80, height: 80, left: 40, bottom: 60, background: "rgba(255,255,255,0.15)", animation: "bubbleMove1 12s linear infinite" },
-  { width: 120, height: 120, right: 120, top: 40, background: "rgba(255,255,255,0.10)", animation: "bubbleMove2 14s linear infinite" },
-  { width: 100, height: 100, right: 80, bottom: 40, background: "rgba(255,255,255,0.12)", animation: "bubbleMove3 10s linear infinite" },
-  { width: 60, height: 60, left: 100, top: 120, background: "rgba(255,255,255,0.18)", animation: "bubbleMove4 16s linear infinite" },
-  { width: 90, height: 90, right: 40, top: 200, background: "rgba(255,255,255,0.13)", animation: "bubbleMove5 18s linear infinite" },
-  { width: 70, height: 70, left: 200, bottom: 120, background: "rgba(255,255,255,0.14)", animation: "bubbleMove6 15s linear infinite" },
-  { width: 50, height: 50, right: 180, bottom: 100, background: "rgba(255,255,255,0.16)", animation: "bubbleMove7 13s linear infinite" },
-];
+// Bubbles removed
 
 const AboutUs = () => {
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    const html = document.documentElement;
-    if (darkMode) {
-      html.classList.add('dark');
-    } else {
-      html.classList.remove('dark');
-    }
-  }, [darkMode]);
+  const { isDark } = useTheme()
+  const [openFaq, setOpenFaq] = useState(null);
 
   return (
     <div
       className={`
         w-full min-h-screen px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32 py-8 flex flex-col items-center relative
         mt-16 transition-all duration-500
-        ${darkMode 
-          ? 'bg-gradient-to-r from-slate-900 via-gray-900 to-black' 
-          : 'bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600'
+        ${isDark 
+          ? 'bg-gradient-to-r from-gray-900 via-black to-gray-900' 
+          : 'bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600'
         }
       `}
     >
+      
       {/* Animated bubbles */}
-      {bubbleStyles.map((style, idx) => (
-        <div
-          key={idx}
-          className="absolute rounded-full bubble"
-          style={{
-            ...style,
-            zIndex: 0,
-          }}
-        />
-      ))}
-      {/* Extra bubbles for dark theme */}
-      {darkMode && (
-        <>
-          <div
-            className="absolute rounded-full bubble"
-            style={{
-              width: 110,
-              height: 110,
-              left: 80,
-              top: 180,
-              background: "rgba(60,70,100,0.25)",
-              animation: "bubbleDark1 18s linear infinite",
-              zIndex: 0,
-            }}
-          />
-          <div
-            className="absolute rounded-full bubble"
-            style={{
-              width: 70,
-              height: 70,
-              right: 60,
-              bottom: 180,
-              background: "rgba(60,70,100,0.20)",
-              animation: "bubbleDark2 22s linear infinite",
-              zIndex: 0,
-            }}
-          />
-          <div
-            className="absolute rounded-full bubble"
-            style={{
-              width: 90,
-              height: 90,
-              left: 300,
-              top: 60,
-              background: "rgba(60,70,100,0.18)",
-              animation: "bubbleDark3 20s linear infinite",
-              zIndex: 0,
-            }}
-          />
-        </>
-      )}
-      <style>
-        {`
-          .dark .bubble {
-            background: rgba(60,70,100,0.18) !important;
-          }
-          @keyframes bubbleMove1 { 0%{transform:translateY(0)scale(1);} 50%{transform:translateY(-30px)scale(1.1);} 100%{transform:translateY(0)scale(1);} }
-          @keyframes bubbleMove2 { 0%{transform:translateY(0)scale(1);} 50%{transform:translateY(40px)scale(0.95);} 100%{transform:translateY(0)scale(1);} }
-          @keyframes bubbleMove3 { 0%{transform:translateX(0)scale(1);} 50%{transform:translateX(-30px)scale(1.08);} 100%{transform:translateX(0)scale(1);} }
-          @keyframes bubbleMove4 { 0%{transform:translateY(0)scale(1);} 50%{transform:translateY(-20px)scale(1.05);} 100%{transform:translateY(0)scale(1);} }
-          @keyframes bubbleMove5 { 0%{transform:translateX(0)scale(1);} 50%{transform:translateX(30px)scale(0.92);} 100%{transform:translateX(0)scale(1);} }
-          @keyframes bubbleMove6 { 0%{transform:translateY(0)scale(1);} 50%{transform:translateY(25px)scale(1.07);} 100%{transform:translateY(0)scale(1);} }
-          @keyframes bubbleMove7 { 0%{transform:translateX(0)scale(1);} 50%{transform:translateX(-20px)scale(1.03);} 100%{transform:translateX(0)scale(1);} }
-          @keyframes bubbleDark1 { 0%{transform:translateY(0)scale(1);} 50%{transform:translateY(-40px)scale(1.12);} 100%{transform:translateY(0)scale(1);} }
-          @keyframes bubbleDark2 { 0%{transform:translateX(0)scale(1);} 50%{transform:translateX(40px)scale(1.08);} 100%{transform:translateX(0)scale(1);} }
-          @keyframes bubbleDark3 { 0%{transform:translateY(0)scale(1);} 50%{transform:translateY(30px)scale(0.95);} 100%{transform:translateY(0)scale(1);} }
-        `}
-      </style>
-      <div className="w-full max-w-4xl text-center mb-12 relative z-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-4">About PriceVista</h1>
-        <p className="text-lg sm:text-xl text-[#283593] dark:text-[#bfc3d9] max-w-3xl mx-auto">
-          We're on a mission to help consumers make smarter purchasing decisions 
-          by providing transparent price tracking and comparison tools.
-        </p>
+      {/* Bubble effects removed for a cleaner aesthetic */}
+      <div className="w-full max-w-6xl mb-12 relative overflow-hidden rounded-2xl shadow-lg">
+        <div className="absolute inset-0 -z-10">
+          <video
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/assets/logo.jpg"
+          >
+            <source src="https://cdn.coverr.co/videos/coverr-shopping-cart-9153/1080p.mp4" type="video/mp4" />
+          </video>
+          <div className={`${isDark ? 'bg-black/70' : 'bg-indigo-900/40'} absolute inset-0`} />
+        </div>
+        <div className="px-6 sm:px-10 py-12 text-center">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white drop-shadow-md mb-4">
+            Smarter Shopping Starts Here
+          </h1>
+          <p className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto mb-6">
+            PriceVista tracks prices across stores, alerts you on drops, and helps you buy at the right time.
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <a href="/signup" className="px-5 py-3 rounded-lg font-semibold text-white bg-black/30 hover:bg-black/40 dark:bg-white/10 dark:hover:bg-white/20 border border-white/30 transition">
+              Get Started Free
+            </a>
+            <a href="/tracker" className="px-5 py-3 rounded-lg font-semibold text-white bg-indigo-600/90 hover:bg-indigo-600 transition">
+              Explore Tracker
+            </a>
+          </div>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+            <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-5 shadow">
+              <div className="text-sm font-semibold text-indigo-600 dark:text-indigo-300 mb-1">Real-time Alerts</div>
+              <div className="text-[#1a237e] dark:text-[#e3e6f5] font-bold mb-1">Never miss a price drop</div>
+              <p className="text-[#283593] dark:text-[#bfc3d9] text-sm">Instant notifications when products hit your target price.</p>
+            </div>
+            <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-5 shadow">
+              <div className="text-sm font-semibold text-indigo-600 dark:text-indigo-300 mb-1">Smart Comparisons</div>
+              <div className="text-[#1a237e] dark:text-[#e3e6f5] font-bold mb-1">See the best retailer</div>
+              <p className="text-[#283593] dark:text-[#bfc3d9] text-sm">Compare across stores with fees and shipping considered.</p>
+            </div>
+            <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-5 shadow">
+              <div className="text-sm font-semibold text-indigo-600 dark:text-indigo-300 mb-1">Historical Insights</div>
+              <div className="text-[#1a237e] dark:text-[#e3e6f5] font-bold mb-1">Buy at the right time</div>
+              <p className="text-[#283593] dark:text-[#bfc3d9] text-sm">Trend charts show if now is the best moment to purchase.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Strip */}
+      <div className="w-full max-w-6xl grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12 relative z-10">
+        <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-4 text-center shadow">
+          <div className="text-2xl font-extrabold text-[#1a237e] dark:text-[#e3e6f5]">50k+</div>
+          <div className="text-xs text-[#283593] dark:text-[#bfc3d9]">Active Users</div>
+        </div>
+        <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-4 text-center shadow">
+          <div className="text-2xl font-extrabold text-[#1a237e] dark:text-[#e3e6f5]">1M+</div>
+          <div className="text-xs text-[#283593] dark:text-[#bfc3d9]">Prices Tracked</div>
+        </div>
+        <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-4 text-center shadow">
+          <div className="text-2xl font-extrabold text-[#1a237e] dark:text-[#e3e6f5]">$3.2M</div>
+          <div className="text-xs text-[#283593] dark:text-[#bfc3d9]">Saved by Users</div>
+        </div>
+        <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-4 text-center shadow">
+          <div className="text-2xl font-extrabold text-[#1a237e] dark:text-[#e3e6f5]">120+</div>
+          <div className="text-xs text-[#283593] dark:text-[#bfc3d9]">Retailers Covered</div>
+        </div>
       </div>
 
       <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16 relative z-10">
         <div className="rounded-lg p-6">
           <h2 className="text-2xl font-bold text-[#1a237e] dark:text-white mb-4">Our Mission</h2>
-          <p className="text-[#283593] dark:text-[#181a2a] leading-relaxed">
+          <p className="text-[#283593] dark:text-white leading-relaxed">
             PriceVista was founded with a simple goal: to eliminate the frustration 
             of overpaying for products. We believe that every consumer deserves 
             access to accurate, real-time pricing information to make informed decisions.
@@ -121,7 +101,7 @@ const AboutUs = () => {
         </div>
         <div className="rounded-lg p-6">
           <h2 className="text-2xl font-bold text-[#1a237e] dark:text-white mb-4">Our Vision</h2>
-          <p className="text-[#283593] dark:text-[#181a2a] leading-relaxed">
+          <p className="text-[#283593] dark:text-white leading-relaxed">
             We envision a world where price transparency is the norm, not the exception. 
             Our platform empowers users to track prices, compare retailers, and 
             never miss the best deals available.
@@ -164,21 +144,81 @@ const AboutUs = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-5xl text-center mb-16 relative z-10">
-        <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-4">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white dark:bg-[#181a2a] rounded-lg shadow p-6 text-center">
-            <h4 className="font-semibold text-primary-700 dark:text-blue-200 mb-2">1. Track Products</h4>
-            <p className="text-[#283593] dark:text-[#bfc3d9]">Add products you want to monitor. We’ll keep an eye on prices for you.</p>
-          </div>
-          <div className="bg-white dark:bg-[#181a2a] rounded-lg shadow p-6 text-center">
-            <h4 className="font-semibold text-primary-700 dark:text-blue-200 mb-2">2. Get Alerts</h4>
-            <p className="text-[#283593] dark:text-[#bfc3d9]">Receive instant notifications when prices drop or deals are available.</p>
-          </div>
-          <div className="bg-white dark:bg-[#181a2a] rounded-lg shadow p-6 text-center">
-            <h4 className="font-semibold text-primary-700 dark:text-blue-200 mb-2">3. Compare & Save</h4>
-            <p className="text-[#283593] dark:text-[#bfc3d9]">Compare prices across retailers and make the smartest purchase.</p>
-          </div>
+      {/* Feature grid */}
+      <div className="w-full max-w-6xl mb-16 relative z-10">
+        <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-4 text-center">Why Choose PriceVista?</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { title: 'Price Drop Alerts', desc: 'Custom thresholds with instant notifications.', icon: (
+              <svg className="w-6 h-6 text-indigo-600 dark:text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            )},
+            { title: 'Retailer Comparison', desc: 'Full cost view with shipping and fees.', icon: (
+              <svg className="w-6 h-6 text-indigo-600 dark:text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M3 12h18M3 17h18"/></svg>
+            )},
+            { title: 'History & Trends', desc: 'See highs/lows and seasonal patterns.', icon: (
+              <svg className="w-6 h-6 text-indigo-600 dark:text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 3v18M3 11h18"/></svg>
+            )},
+          ].map((f, i) => (
+            <div key={i} className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-6 shadow">
+              <div className="mb-3">{f.icon}</div>
+              <div className="font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-1">{f.title}</div>
+              <p className="text-[#283593] dark:text-[#bfc3d9] text-sm">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="w-full max-w-6xl text-center mb-16 relative z-10 overflow-hidden rounded-2xl">
+        <div className="absolute inset-0 -z-10">
+          <img src="/products/360/laptop-1.jpg" alt="Roadmap background" className="w-full h-full object-cover" />
+          <div className={`${isDark ? 'bg-black/70' : 'bg-white/60'} absolute inset-0`} />
+        </div>
+        <h2 className="text-2xl font-bold text-[#1a237e] dark:text-white mb-6">Our Roadmap</h2>
+        <div className="relative mx-auto max-w-3xl">
+          <div className={`absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] ${isDark ? 'bg-white/30' : 'bg-indigo-800/20'}`} />
+          {[
+            { title: 'Q1: Advanced Alerts', desc: 'AI-powered signals and better thresholds.' },
+            { title: 'Q2: More Stores', desc: 'Expanding coverage to international retailers.' },
+            { title: 'Q3: Collections', desc: 'Track product bundles and wishlists.' },
+          ].map((step, i) => (
+            <div key={i} className={`relative flex items-start gap-4 mb-8 ${i % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className="w-1/2" />
+              <div className="relative rounded-lg shadow w-1/2 overflow-hidden">
+                <img src="/products/360/laptop-1.jpg" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover opacity-20" />
+                <div className="absolute inset-0 bg-white/85 dark:bg-[#181a2a]/85" />
+                <div className="relative p-4">
+                  <div className="absolute -left-2 top-4 w-4 h-4 rounded-full bg-indigo-600 dark:bg-indigo-400 border-2 border-white dark:border-[#181a2a]" />
+                  <div className="font-semibold text-[#1a237e] dark:text-[#e3e6f5]">{step.title}</div>
+                  <p className="text-sm text-[#283593] dark:text-[#bfc3d9]">{step.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Testimonials */}
+      <div className="w-full max-w-6xl mb-16 relative z-10">
+        <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-6 text-center">What Users Say</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { name: 'Aarav', quote: 'PriceVista helped me time my laptop purchase and saved 18%.', role: 'Student' },
+            { name: 'Meera', quote: 'The alerts are spot on. I finally stopped refreshing product pages.', role: 'Designer' },
+            { name: 'Rahul', quote: 'Love the history charts. Makes it easy to decide when to buy.', role: 'Engineer' },
+          ].map((t, i) => (
+            <div key={i} className="bg-white/90 dark:bg-[#181a2a] rounded-xl shadow p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold">
+                  {t.name[0]}
+                </div>
+                <div>
+                  <div className="font-semibold text-[#1a237e] dark:text-[#e3e6f5]">{t.name}</div>
+                  <div className="text-xs text-[#283593] dark:text-[#bfc3d9]">{t.role}</div>
+                </div>
+              </div>
+              <p className="text-[#283593] dark:text-[#bfc3d9]">“{t.quote}”</p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -206,6 +246,30 @@ const AboutUs = () => {
         </div>
       </div>
 
+      {/* FAQ */}
+      <div className="w-full max-w-5xl mb-16 relative z-10">
+        <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-4 text-center">FAQs</h2>
+        {[
+          { q: 'Is PriceVista free to use?', a: 'Yes, core features are free. Advanced tools may be offered later.' },
+          { q: 'Which stores are supported?', a: 'We track major retailers and are continuously adding more.' },
+          { q: 'How often are prices updated?', a: 'We refresh frequently and notify you about meaningful changes.' },
+        ].map((item, idx) => (
+          <div key={idx} className="bg-white dark:bg-[#181a2a] rounded-lg shadow p-4 mb-3">
+            <button
+              className="w-full flex items-center justify-between text-left"
+              onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+              aria-expanded={openFaq === idx}
+            >
+              <span className="font-semibold text-[#1a237e] dark:text-[#e3e6f5]">{item.q}</span>
+              <span className="text-[#283593] dark:text-[#bfc3d9]">{openFaq === idx ? '−' : '+'}</span>
+            </button>
+            {openFaq === idx && (
+              <p className="mt-2 text-[#283593] dark:text-[#bfc3d9]">{item.a}</p>
+            )}
+          </div>
+        ))}
+      </div>
+
       <div className="w-full max-w-5xl text-center relative z-10 bg-[#1a237e] dark:bg-[#0a0d17] rounded-lg p-6 sm:p-10">
         <h2 className="text-2xl font-bold text-white mb-4">Join Our Community</h2>
         <p className="text-blue-100 mb-2 font-semibold">
@@ -214,33 +278,35 @@ const AboutUs = () => {
         <p className="text-blue-100 mb-6">
           Need help or have questions? <span className="font-bold">We're here for you.</span> Email us at <a href="mailto:support@pricevista.com" className="text-blue-300 underline">support@pricevista.com</a>
         </p>
-        <button className="btn-primary text-lg px-8 py-3 mb-2 font-bold">
-          Get Started Free
-        </button>
-        <div className="mt-2">
-          <a href="/signup" className="text-blue-300 underline text-sm font-semibold">Create your free account</a>
+        <div className="flex items-center justify-center gap-3">
+          <a href="/signup" className="px-5 py-3 rounded-lg font-semibold text-white bg-indigo-600/90 hover:bg-indigo-600 transition">
+            Get Started Free
+          </a>
+          <a href="/tracker" className="px-5 py-3 rounded-lg font-semibold text-blue-200 bg-white/10 hover:bg-white/20 border border-white/20 transition">
+            Try the Tracker
+          </a>
         </div>
       </div>
 
-      <div className="w-full max-w-5xl mb-16 text-center relative z-10">
-        <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-4">Meet the Team</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 justify-center">
-          <div className="bg-white bg-opacity-80 dark:bg-[#181a2a] dark:bg-opacity-100 rounded-lg shadow p-4 flex flex-col items-center">
-            <img src="/team/prerna.jpg" alt="Prerna Supe" className="w-24 h-24 rounded-full mb-2 object-cover" />
-            <span className="font-bold text-[#1a237e] dark:text-[#e3e6f5]">Prerna Supe</span>
-          </div>
-          <div className="bg-white bg-opacity-80 dark:bg-[#181a2a] dark:bg-opacity-100 rounded-lg shadow p-4 flex flex-col items-center">
-            <img src="/team/umesh.jpg" alt="Umesh Lokhare" className="w-24 h-24 rounded-full mb-2 object-cover" />
-            <span className="font-bold text-[#1a237e] dark:text-[#e3e6f5]">Umesh Lokhare</span>
-          </div>
-          <div className="bg-white bg-opacity-80 dark:bg-[#181a2a] dark:bg-opacity-100 rounded-lg shadow p-4 flex flex-col items-center">
-            <img src="/team/praj.jpg" alt="Praj" className="w-24 h-24 rounded-full mb-2 object-cover" />
-            <span className="font-bold text-[#1a237e] dark:text-[#e3e6f5]">Praj</span>
-          </div>
-          <div className="bg-white bg-opacity-80 dark:bg-[#181a2a] dark:bg-opacity-100 rounded-lg shadow p-4 flex flex-col items-center">
-            <img src="/team/sharval.jpg" alt="Sharval Mokat" className="w-24 h-24 rounded-full mb-2 object-cover" />
-            <span className="font-bold text-[#1a237e] dark:text-[#e3e6f5]">Sharval Mokat</span>
-          </div>
+      <div className="w-full max-w-6xl mb-16 text-center relative z-10">
+        <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-2">Meet the Team</h2>
+        <p className="text-[#283593] dark:text-[#bfc3d9] mb-6">The people behind the product.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {[{name:'Prerna Supe', img:'/team/prerna.jpg', role:'Product'}, {name:'Umesh Lokhare', img:'/team/umesh.jpg', role:'Engineering'}, {name:'Praj', img:'/team/praj.jpg', role:'Design'}, {name:'Sharval Mokat', img:'/team/sharval-new.jpg', role:'Growth'}].map((m,i)=> (
+            <div key={i} className="group bg-white/90 dark:bg-[#181a2a] rounded-xl shadow p-5">
+              <div className="relative w-24 h-24 mx-auto mb-3">
+                <img 
+                  src={m.img} 
+                  alt={m.name} 
+                  className="w-24 h-24 rounded-full object-cover ring-4 ring-white dark:ring-[#0a0d17]" 
+                  onError={(e) => { e.currentTarget.src = '/team/sharval.jpg' }}
+                />
+                <div className="absolute inset-0 rounded-full bg-indigo-600/0 group-hover:bg-indigo-600/10 transition" />
+              </div>
+              <div className="font-bold text-[#1a237e] dark:text-[#e3e6f5]">{m.name}</div>
+              <div className="text-xs text-[#283593] dark:text-[#bfc3d9]">{m.role}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
