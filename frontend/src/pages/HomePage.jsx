@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import ProductCard from '../components/ProductCard'
-import Loader from '../components/Loader'
-import { useTheme } from '../context/ThemeContext'
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, useAnimation } from 'framer-motion';
+import ProductCard from '../components/ProductCard';
+import Loader from '../components/Loader';
+import { useTheme } from '../context/ThemeContext';
+import { useParallax } from '../utils/useParallax';
+import MicroButton from '../components/MicroButton';
 
 const HomePage = () => {
+
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [trendingProducts, setTrendingProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const { isDark } = useTheme()
+  const heroBgRef = useRef(null);
+  const controls = useAnimation();
+
+  useParallax(heroBgRef, 0.15);
+  useEffect(() => { controls.start('visible'); }, [controls]);
 
   useEffect(() => {
     fetchHomeData()
@@ -33,7 +41,6 @@ const HomePage = () => {
     const products = []
     const categories = ['Electronics', 'Fashion', 'Home & Garden', 'Sports', 'Books', 'Toys']
     const retailers = ['Amazon', 'Walmart', 'Target', 'Best Buy', 'eBay']
-    
     const productTemplates = {
       'Electronics': ['Laptop', 'Smartphone', 'Headphones', 'Camera', 'TV', 'Monitor'],
       'Fashion': ['Shirt', 'Dress', 'Shoes', 'Watch', 'Jacket'],
@@ -42,7 +49,6 @@ const HomePage = () => {
       'Books': ['Book', 'Novel', 'Textbook', 'Magazine'],
       'Toys': ['Toy', 'Lego Set', 'Doll', 'Board Game']
     }
-    
     for (let i = 0; i < count; i++) {
       const category = categories[Math.floor(Math.random() * categories.length)]
       const templates = productTemplates[category] || ['Product']
@@ -53,7 +59,6 @@ const HomePage = () => {
       const brandNames = ['Premium', 'Elite', 'Pro', 'Max', 'Ultra', 'Smart']
       const brand = brandNames[Math.floor(Math.random() * brandNames.length)]
       const productName = `${brand} ${template} ${i + 1}`
-      
       products.push({
         id: i + 1,
         name: productName,
@@ -120,176 +125,101 @@ const HomePage = () => {
         ? 'bg-gradient-to-r from-slate-900 via-gray-900 to-black' 
         : 'bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600'
     }`}>
-      {/* Interactive animated background shapes */}
-      <div className="absolute inset-0 opacity-25">
+      {/* Parallax animated background shapes */}
+      <div ref={heroBgRef} className="absolute inset-0 opacity-25 pointer-events-none select-none">
+        {/* ...existing background shapes, can be further enhanced with GSAP if needed... */}
         <motion.div 
-          className={`absolute top-20 left-20 w-72 h-72 rounded-full blur-3xl ${
-            isDark ? 'bg-slate-600/40' : 'bg-blue-400/40'
-          }`}
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          className={`absolute top-20 left-20 w-72 h-72 rounded-full blur-3xl ${isDark ? 'bg-slate-600/40' : 'bg-blue-400/40'}`}
+          animate={{ x: [0, 50, 0], y: [0, -30, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
-          className={`absolute bottom-32 right-32 w-96 h-96 rounded-full blur-3xl ${
-            isDark ? 'bg-gray-600/40' : 'bg-purple-500/40'
-          }`}
-          animate={{
-            x: [0, -40, 0],
-            y: [0, 40, 0],
-            scale: [1, 0.8, 1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
+          className={`absolute bottom-32 right-32 w-96 h-96 rounded-full blur-3xl ${isDark ? 'bg-gray-600/40' : 'bg-purple-500/40'}`}
+          animate={{ x: [0, -40, 0], y: [0, 40, 0], scale: [1, 0.8, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
         <motion.div 
-          className={`absolute top-1/2 left-1/3 w-80 h-80 rounded-full blur-3xl ${
-            isDark ? 'bg-slate-500/30' : 'bg-indigo-400/30'
-          }`}
-          animate={{
-            x: [0, 60, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 4,
-          }}
+          className={`absolute top-1/2 left-1/3 w-80 h-80 rounded-full blur-3xl ${isDark ? 'bg-slate-500/30' : 'bg-indigo-400/30'}`}
+          animate={{ x: [0, 60, 0], y: [0, -50, 0], scale: [1, 1.3, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
         />
         <motion.div 
-          className={`absolute top-1/3 right-1/4 w-64 h-64 rounded-full blur-2xl ${
-            isDark ? 'bg-gray-500/25' : 'bg-cyan-400/25'
-          }`}
-          animate={{
-            x: [0, -30, 0],
-            y: [0, 30, 0],
-            scale: [1, 0.9, 1],
-          }}
-          transition={{
-            duration: 9,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
+          className={`absolute top-1/3 right-1/4 w-64 h-64 rounded-full blur-2xl ${isDark ? 'bg-gray-500/25' : 'bg-cyan-400/25'}`}
+          animate={{ x: [0, -30, 0], y: [0, 30, 0], scale: [1, 0.9, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
-        {/* Floating particles */}
+        {/* ...existing floating particles... */}
         <motion.div 
-          className={`absolute top-1/4 right-1/3 w-4 h-4 rounded-full ${
-            isDark ? 'bg-gray-400/20' : 'bg-white/20'
-          }`}
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.2, 0.8, 0.2],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          className={`absolute top-1/4 right-1/3 w-4 h-4 rounded-full ${isDark ? 'bg-gray-400/20' : 'bg-white/20'}`}
+          animate={{ y: [0, -20, 0], opacity: [0.2, 0.8, 0.2] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
-          className={`absolute bottom-1/4 left-1/4 w-3 h-3 rounded-full ${
-            isDark ? 'bg-gray-400/15' : 'bg-white/15'
-          }`}
-          animate={{
-            y: [0, -15, 0],
-            opacity: [0.1, 0.6, 0.1],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
+          className={`absolute bottom-1/4 left-1/4 w-3 h-3 rounded-full ${isDark ? 'bg-gray-400/15' : 'bg-white/15'}`}
+          animate={{ y: [0, -15, 0], opacity: [0.1, 0.6, 0.1] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
         <motion.div 
-          className={`absolute top-3/4 right-1/2 w-2 h-2 rounded-full ${
-            isDark ? 'bg-gray-400/25' : 'bg-white/25'
-          }`}
-          animate={{
-            y: [0, -10, 0],
-            opacity: [0.2, 0.7, 0.2],
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
+          className={`absolute top-3/4 right-1/2 w-2 h-2 rounded-full ${isDark ? 'bg-gray-400/25' : 'bg-white/25'}`}
+          animate={{ y: [0, -10, 0], opacity: [0.2, 0.7, 0.2] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
-        </div>
+      </div>
 
-      {/* Hero Section */}
+      {/* Hero Section with advanced stagger and magnetic buttons */}
       <section className="relative py-20 lg:py-32 text-center">
-          <motion.h1 
+        <motion.h1
           className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight cursor-default"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          whileHover={{ scale: 1.02 }}
+          initial="hidden"
+          animate={controls}
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.12 } }
+          }}
         >
           <motion.span
             className="inline-block"
+            variants={{ hidden: { y: 10, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
             whileHover={{ y: -5 }}
             transition={{ duration: 0.2 }}
           >
             Track Prices,
           </motion.span>{' '}
-          <motion.span 
-            className={`inline-block ${
-              isDark ? 'text-white' : 'text-yellow-300'
-            }`}
-            whileHover={{ y: -5, scale: 1.05 }}
-            transition={{ duration: 0.2 }}
+          <motion.span
+            className="inline-block bg-gradient-to-r from-yellow-300 via-pink-400 to-purple-500 bg-clip-text text-transparent"
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+            initial={{ backgroundPosition: '0% 50%' }}
+            animate={{ backgroundPosition: ['0% 50%', '100% 50%'] }}
+            transition={{ duration: 2, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
+            style={{ backgroundSize: '200% 200%' }}
           >
-              Save Money
+            Save Money
           </motion.span>
-          </motion.h1>
-          <motion.p 
+        </motion.h1>
+        <motion.p
           className="text-xl md:text-2xl mb-10 max-w-4xl mx-auto leading-relaxed font-light text-blue-100"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Never overpay again. PriceVista tracks prices across multiple retailers 
-            and alerts you when prices drop on your favorite products.
-          </motion.p>
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-6 justify-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/search"
-              className="inline-block bg-white text-purple-700 font-semibold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:bg-gray-50"
-              >
-                Start Searching
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/tracker"
-              className="inline-block bg-purple-700/80 text-white border border-white/30 font-semibold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:bg-purple-600 hover:shadow-xl hover:-translate-y-2 hover:border-white/50"
-              >
-                Price Tracker
-              </Link>
-            </motion.div>
-          </motion.div>
+          initial="hidden"
+          animate={controls}
+          variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+          transition={{ delay: 0.2 }}
+        >
+          Never overpay again. PriceVista tracks prices across multiple retailers
+          and alerts you when prices drop on your favorite products.
+        </motion.p>
+        <motion.div
+          className="flex flex-col sm:flex-row gap-6 justify-center"
+          initial="hidden"
+          animate={controls}
+          variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+          transition={{ delay: 0.4 }}
+        >
+          <MicroButton onClick={() => window.location.href = '/search'}>
+            Start Searching
+          </MicroButton>
+          <MicroButton className="bg-purple-700/80 text-white border border-white/30">
+            <span onClick={() => window.location.href = '/tracker'}>Price Tracker</span>
+          </MicroButton>
+        </motion.div>
       </section>
 
       {/* Features Section */}
@@ -355,15 +285,7 @@ const HomePage = () => {
             </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <ProductCard product={product} />
-              </motion.div>
+              <ProductCard product={product} index={index} key={product.id} />
             ))}
           </div>
         </div>
@@ -381,15 +303,7 @@ const HomePage = () => {
             </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {trendingProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <ProductCard product={product} />
-              </motion.div>
+              <ProductCard product={product} index={index} key={product.id} />
             ))}
           </div>
         </div>

@@ -1,12 +1,26 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { useUser } from '../context/UserContext'
-import { getProductImage } from '../utils/productImageHelper'
+import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { useUser } from '../context/UserContext';
+import { getProductImage } from '../utils/productImageHelper';
+import MicroButton from './MicroButton';
 
-const ProductCard = ({ product }) => {
-  const { isAuthenticated } = useUser()
-  
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.08,
+      duration: 0.5,
+      type: 'spring',
+      stiffness: 60
+    }
+  })
+}
+
+const ProductCard = ({ product, index }) => {
+  const { isAuthenticated } = useUser();
   const {
     id,
     name,
@@ -19,21 +33,49 @@ const ProductCard = ({ product }) => {
     inStock,
     discount,
     category
-  } = product
+  } = product;
 
-  const priceDifference = originalPrice - price
-  const discountPercentage = Math.round((priceDifference / originalPrice) * 100)
+  const priceDifference = originalPrice - price;
+  const discountPercentage = Math.round((priceDifference / originalPrice) * 100);
+  const productImage = getProductImage(name, category);
 
-  // Get the appropriate image based on product name and category
-  const productImage = getProductImage(name, category)
+  // 3D tilt effect
+  const ref = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useTransform(y, [0, 1], [0, -8]);
+  const rotateY = useTransform(x, [0, 1], [0, 8]);
+
+  function handleMouseMove(e) {
+    const rect = ref.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    x.set(px);
+    y.set(py);
+  }
+  function handleMouseLeave() {
+    x.set(0.5);
+    y.set(0.5);
+  }
 
   return (
-    <motion.div 
-      className="card-gradient hover:shadow-glow transition-all duration-300 group dark:from-dark-800/90 dark:to-dark-700/90 dark:shadow-xl dark:border-dark-600/30"
-      whileHover={{ y: -8, scale: 1.02 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+    <motion.div
+      ref={ref}
+      className="card-gradient transition-all duration-300 group dark:from-dark-800/90 dark:to-dark-700/90 dark:shadow-xl dark:border-dark-600/30"
+      custom={index}
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={{ y: -12, scale: 1.035, boxShadow: '0 8px 32px 0 rgba(80,0,180,0.13)' }}
+      whileTap={{ scale: 0.98 }}
+      layout
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Product Image */}
       <div className="relative mb-6 overflow-hidden rounded-2xl">
@@ -42,19 +84,28 @@ const ProductCard = ({ product }) => {
           alt={name}
           className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
           onError={(e) => {
-            // Fallback to default image if the mapped image fails to load
-            e.target.src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop'
+            e.target.src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop';
           }}
         />
         {discount > 0 && (
-          <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm">
+          <motion.div
+            className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm"
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1.1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+          >
             -{discountPercentage}%
-          </div>
+          </motion.div>
         )}
         {!inStock && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm">
+          <motion.div
+            className="absolute top-3 right-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm"
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1.1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+          >
             Out of Stock
-          </div>
+          </motion.div>
         )}
         {/* Shimmer effect overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -108,24 +159,19 @@ const ProductCard = ({ product }) => {
 
         {/* Actions */}
         <div className="flex space-x-3 pt-4">
-          <Link
-            to={`/product/${id}`}
-            className="btn-primary flex-1 text-center hover:from-primary-700 hover:to-secondary-700 hover:shadow-glow transform hover:scale-105 hover:-translate-y-1"
-          >
+          <MicroButton as="a" href={`/product/${id}`} className="flex-1 text-center">
             View Details
-          </Link>
-          
+          </MicroButton>
           {isAuthenticated && (
-            <motion.button
-              className="p-3 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 hover:from-gray-200 hover:to-gray-300 transition-all duration-300 shadow-lg hover:shadow-glow dark:from-dark-700 dark:to-dark-600 dark:text-gray-200 dark:hover:from-dark-600 dark:hover:to-dark-500"
+            <MicroButton
+              className="p-3 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 dark:from-dark-700 dark:to-dark-600 dark:text-gray-200"
               title="Add to favorites"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.9 }}
+              style={{ width: 48, height: 48, minWidth: 48, minHeight: 48 }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
-            </motion.button>
+            </MicroButton>
           )}
         </div>
       </div>

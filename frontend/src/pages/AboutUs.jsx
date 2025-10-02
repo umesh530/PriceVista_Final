@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useTheme } from "../context/ThemeContext"
 
 // Bubbles removed
@@ -7,8 +8,14 @@ const AboutUs = () => {
   const { isDark } = useTheme()
   const [openFaq, setOpenFaq] = useState(null);
 
+  // Animation variants
+  const fadeSlide = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } }
+  }
+
   return (
-    <div
+    <motion.div
       className={`
         w-full min-h-screen px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32 py-8 flex flex-col items-center relative
         mt-16 transition-all duration-500
@@ -17,11 +24,14 @@ const AboutUs = () => {
           : 'bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600'
         }
       `}
+      initial="hidden"
+      animate="visible"
+      variants={fadeSlide}
     >
-      
-      {/* Animated bubbles */}
-      {/* Bubble effects removed for a cleaner aesthetic */}
-      <div className="w-full max-w-6xl mb-12 relative overflow-hidden rounded-2xl shadow-lg">
+      <>
+        {/* Animated bubbles */}
+        {/* Bubble effects removed for a cleaner aesthetic */}
+        <motion.div className="w-full max-w-6xl mb-12 relative overflow-hidden rounded-2xl shadow-lg" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <div className="absolute inset-0 -z-10">
           <video
             className="w-full h-full object-cover"
@@ -36,19 +46,42 @@ const AboutUs = () => {
           <div className={`${isDark ? 'bg-black/70' : 'bg-indigo-900/40'} absolute inset-0`} />
         </div>
         <div className="px-6 sm:px-10 py-12 text-center">
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white drop-shadow-md mb-4">
+          <motion.h1
+            className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white drop-shadow-md mb-4"
+            initial={{ backgroundPosition: '0% 50%' }}
+            animate={{ backgroundPosition: ['0% 50%', '100% 50%'] }}
+            transition={{ duration: 2, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
+            style={{
+              background: 'linear-gradient(90deg, #facc15, #f472b6, #a78bfa)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              color: 'transparent',
+              backgroundSize: '200% 200%'
+            }}
+          >
             Smarter Shopping Starts Here
-          </h1>
+          </motion.h1>
           <p className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto mb-6">
             PriceVista tracks prices across stores, alerts you on drops, and helps you buy at the right time.
           </p>
           <div className="flex items-center justify-center gap-3">
-            <a href="/signup" className="px-5 py-3 rounded-lg font-semibold text-white bg-black/30 hover:bg-black/40 dark:bg-white/10 dark:hover:bg-white/20 border border-white/30 transition">
+            <motion.a
+              href="/signup"
+              className="px-5 py-3 rounded-lg font-semibold text-white bg-black/30 dark:bg-white/10 border border-white/30 transition"
+              whileHover={{ scale: 1.07, boxShadow: '0 8px 32px 0 rgba(80,0,180,0.18)' }}
+              whileTap={{ scale: 0.97 }}
+            >
               Get Started Free
-            </a>
-            <a href="/tracker" className="px-5 py-3 rounded-lg font-semibold text-white bg-indigo-600/90 hover:bg-indigo-600 transition">
+            </motion.a>
+            <motion.a
+              href="/tracker"
+              className="px-5 py-3 rounded-lg font-semibold text-white bg-indigo-600/90 transition"
+              whileHover={{ scale: 1.07, boxShadow: '0 8px 32px 0 rgba(80,0,180,0.18)' }}
+              whileTap={{ scale: 0.97 }}
+            >
               Explore Tracker
-            </a>
+            </motion.a>
           </div>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
             <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-5 shadow">
@@ -68,10 +101,10 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Stats Strip */}
-      <div className="w-full max-w-6xl grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12 relative z-10">
+        <div className="w-full max-w-6xl grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12 relative z-10">
         <div className="bg-white/90 dark:bg-[#181a2a] rounded-xl p-4 text-center shadow">
           <div className="text-2xl font-extrabold text-[#1a237e] dark:text-[#e3e6f5]">50k+</div>
           <div className="text-xs text-[#283593] dark:text-[#bfc3d9]">Active Users</div>
@@ -88,12 +121,12 @@ const AboutUs = () => {
           <div className="text-2xl font-extrabold text-[#1a237e] dark:text-[#e3e6f5]">120+</div>
           <div className="text-xs text-[#283593] dark:text-[#bfc3d9]">Retailers Covered</div>
         </div>
-      </div>
+  </div>
 
-      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16 relative z-10">
+    <motion.div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16 relative z-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <div className="rounded-lg p-6">
           <h2 className="text-2xl font-bold text-[#1a237e] dark:text-white mb-4">Our Mission</h2>
-          <p className="text-[#283593] dark:text-white leading-relaxed">
+          <p className="text-teal-700 dark:text-yellow-300 leading-relaxed">
             PriceVista was founded with a simple goal: to eliminate the frustration 
             of overpaying for products. We believe that every consumer deserves 
             access to accurate, real-time pricing information to make informed decisions.
@@ -101,15 +134,15 @@ const AboutUs = () => {
         </div>
         <div className="rounded-lg p-6">
           <h2 className="text-2xl font-bold text-[#1a237e] dark:text-white mb-4">Our Vision</h2>
-          <p className="text-[#283593] dark:text-white leading-relaxed">
+          <p className="text-teal-700 dark:text-yellow-300 leading-relaxed">
             We envision a world where price transparency is the norm, not the exception. 
             Our platform empowers users to track prices, compare retailers, and 
             never miss the best deals available.
           </p>
         </div>
-      </div>
+  </motion.div>
 
-      <div className="w-full max-w-5xl bg-gray-50 dark:bg-[#181a2a] rounded-lg p-4 sm:p-8 mb-16 relative z-10">
+    <motion.div className="w-full max-w-5xl bg-gray-50 dark:bg-[#181a2a] rounded-lg p-4 sm:p-8 mb-16 relative z-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-6 text-center">Why Choose PriceVista?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
@@ -142,10 +175,10 @@ const AboutUs = () => {
             <p className="text-[#283593] dark:text-[#bfc3d9]">Your data is protected with industry-standard security measures.</p>
           </div>
         </div>
-      </div>
+  </motion.div>
 
       {/* Feature grid */}
-      <div className="w-full max-w-6xl mb-16 relative z-10">
+    <motion.div className="w-full max-w-6xl mb-16 relative z-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-4 text-center">Why Choose PriceVista?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
@@ -166,9 +199,9 @@ const AboutUs = () => {
             </div>
           ))}
         </div>
-      </div>
+  </motion.div>
 
-      <div className="w-full max-w-6xl text-center mb-16 relative z-10 overflow-hidden rounded-2xl">
+    <motion.div className="w-full max-w-6xl text-center mb-16 relative z-10 overflow-hidden rounded-2xl" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <div className="absolute inset-0 -z-10">
           <img src="/products/360/laptop-1.jpg" alt="Roadmap background" className="w-full h-full object-cover" />
           <div className={`${isDark ? 'bg-black/70' : 'bg-white/60'} absolute inset-0`} />
@@ -195,10 +228,10 @@ const AboutUs = () => {
             </div>
           ))}
         </div>
-      </div>
+  </motion.div>
 
       {/* Testimonials */}
-      <div className="w-full max-w-6xl mb-16 relative z-10">
+    <motion.div className="w-full max-w-6xl mb-16 relative z-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-6 text-center">What Users Say</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
@@ -220,9 +253,9 @@ const AboutUs = () => {
             </div>
           ))}
         </div>
-      </div>
+  </motion.div>
 
-      <div className="w-full max-w-5xl mb-16 relative z-10 bg-[#1a237e] dark:bg-[#0a0d17] rounded-lg p-6 sm:p-10">
+    <motion.div className="w-full max-w-5xl mb-16 relative z-10 bg-[#1a237e] dark:bg-[#0a0d17] rounded-lg p-6 sm:p-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <h2 className="text-2xl font-bold text-white mb-4 text-center">Our Values</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
@@ -244,10 +277,10 @@ const AboutUs = () => {
             </p>
           </div>
         </div>
-      </div>
+  </motion.div>
 
       {/* FAQ */}
-      <div className="w-full max-w-5xl mb-16 relative z-10">
+    <motion.div className="w-full max-w-5xl mb-16 relative z-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-4 text-center">FAQs</h2>
         {[
           { q: 'Is PriceVista free to use?', a: 'Yes, core features are free. Advanced tools may be offered later.' },
@@ -268,9 +301,9 @@ const AboutUs = () => {
             )}
           </div>
         ))}
-      </div>
+  </motion.div>
 
-      <div className="w-full max-w-5xl text-center relative z-10 bg-[#1a237e] dark:bg-[#0a0d17] rounded-lg p-6 sm:p-10">
+    <motion.div className="w-full max-w-5xl text-center relative z-10 bg-[#1a237e] dark:bg-[#0a0d17] rounded-lg p-6 sm:p-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <h2 className="text-2xl font-bold text-white mb-4">Join Our Community</h2>
         <p className="text-blue-100 mb-2 font-semibold">
           Take control of your shopping. Discover the power of PriceVista and never miss a deal again.
@@ -279,16 +312,26 @@ const AboutUs = () => {
           Need help or have questions? <span className="font-bold">We're here for you.</span> Email us at <a href="mailto:support@pricevista.com" className="text-blue-300 underline">support@pricevista.com</a>
         </p>
         <div className="flex items-center justify-center gap-3">
-          <a href="/signup" className="px-5 py-3 rounded-lg font-semibold text-white bg-indigo-600/90 hover:bg-indigo-600 transition">
+          <motion.a
+            href="/signup"
+            className="px-5 py-3 rounded-lg font-semibold text-white bg-indigo-600/90 transition"
+            whileHover={{ scale: 1.07, boxShadow: '0 8px 32px 0 rgba(80,0,180,0.18)' }}
+            whileTap={{ scale: 0.97 }}
+          >
             Get Started Free
-          </a>
-          <a href="/tracker" className="px-5 py-3 rounded-lg font-semibold text-blue-200 bg-white/10 hover:bg-white/20 border border-white/20 transition">
+          </motion.a>
+          <motion.a
+            href="/tracker"
+            className="px-5 py-3 rounded-lg font-semibold text-blue-200 bg-white/10 border border-white/20 transition"
+            whileHover={{ scale: 1.07, boxShadow: '0 8px 32px 0 rgba(80,0,180,0.18)' }}
+            whileTap={{ scale: 0.97 }}
+          >
             Try the Tracker
-          </a>
+          </motion.a>
         </div>
-      </div>
+  </motion.div>
 
-      <div className="w-full max-w-6xl mb-16 text-center relative z-10">
+    <motion.div className="w-full max-w-6xl mb-16 text-center relative z-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeSlide}>
         <h2 className="text-2xl font-bold text-[#1a237e] dark:text-[#e3e6f5] mb-2">Meet the Team</h2>
         <p className="text-[#283593] dark:text-[#bfc3d9] mb-6">The people behind the product.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -308,8 +351,9 @@ const AboutUs = () => {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+  </motion.div>
+      </>
+    </motion.div>
   )
 }
 
