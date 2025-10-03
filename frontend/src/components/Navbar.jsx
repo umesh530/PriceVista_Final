@@ -1,25 +1,38 @@
-import React, { useState, useEffect } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import React, { useState, useRef, useEffect } from 'react'
+import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useUser } from '../context/UserContext'
 import { useTheme } from '../context/ThemeContext'
+import gsap from 'gsap'
 import logo from "../assets/logo.jpg";
 
+// Import custom scroll blur hook
+import { useScrollBlur } from '../utils/useScrollBlur';
+
 const Navbar = () => {
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [isScrolled, setIsScrolled] = useState(false)
   const { user, logout, isAuthenticated } = useUser()
   const { isDark, toggleTheme } = useTheme()
-  const navigate = useNavigate()
-
+  const bgMorphRef = useRef(null)
+  // Animate radial background morph on theme change
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
+    if (bgMorphRef.current) {
+      gsap.fromTo(
+        bgMorphRef.current,
+        { opacity: 0, scale: 0.7 },
+        { opacity: 1, scale: 1.2, duration: 0.7, ease: 'power2.out',
+          onComplete: () => {
+            gsap.to(bgMorphRef.current, { opacity: 0, scale: 1.4, duration: 0.7, delay: 0.2 })
+          }
+        }
+      )
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [isDark])
+  const navigate = useNavigate()
+  // Use custom scroll blur hook for navbar effects
+  const isScrolled = useScrollBlur(24)
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -39,7 +52,7 @@ const Navbar = () => {
   // ✅ Admin Panel visible only for admins
   const navLinks = [
     { to: '/', label: 'Home' },
-    { to: '/tracker', label: 'Price Tracker' },
+    { to: '/tracker', label: 'Price Tracker', isLink: true },
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' },
     { to: '/auth', label: 'Login / Signup' },
@@ -47,15 +60,29 @@ const Navbar = () => {
   ]
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/95 dark:bg-dark-900/95 backdrop-blur-md shadow-lg border-b border-gray-200/50 dark:border-dark-700/50' 
-          : 'bg-white dark:bg-dark-900'
-      }`}
-    >
+    <>
+      {/* Radial morphing background for theme switch */}
+      <div
+        ref={bgMorphRef}
+        className="fixed inset-0 pointer-events-none z-40"
+        style={{
+          background: isDark
+            ? 'radial-gradient(circle at 70% 30%, #18181b 0%, #232946 100%)'
+            : 'radial-gradient(circle at 30% 70%, #f3e8ff 0%, #e0e7ff 100%)',
+          opacity: 0,
+          transition: 'background 0.7s',
+        }}
+      />
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 80, damping: 18 }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled 
+            ? 'bg-white/95 dark:bg-dark-900/95 backdrop-blur-md shadow-lg border-b border-gray-200/50 dark:border-dark-700/50' 
+            : 'bg-white dark:bg-dark-900'
+        }`}
+      >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
@@ -102,39 +129,108 @@ const Navbar = () => {
           </div>
 
           {/* Navigation Links - Desktop */}
+          {/* Desktop Navigation Links with Animated Underline */}
           <div className="hidden md:flex items-center space-x-4">
             {navLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                className={({ isActive }) =>
-                  isActive
-                    ? "px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-md transition-all duration-200"
-                    : "px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 transition-colors duration-200"
-                }
-              >
-                {link.label}
-              </NavLink>
+              link.isLink ? (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`relative px-4 py-2 rounded-lg transition-colors duration-200 ${window.location.pathname === link.to ? 'text-primary-700 dark:text-primary-400 font-semibold' : 'text-gray-700 dark:text-gray-300 hover:text-primary-600'}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="relative z-10">{link.label}</span>
+                  {/* Animated underline for active link */}
+                  {window.location.pathname === link.to && (
+                    <motion.span
+                      layoutId="navbar-underline"
+                      className="absolute left-2 right-2 -bottom-1 h-1 rounded-full bg-gradient-to-r from-primary-500 to-primary-700 dark:from-primary-400 dark:to-primary-600"
+                      initial={{ opacity: 0, scaleX: 0.5 }}
+                      animate={{ opacity: 1, scaleX: 1 }}
+                      exit={{ opacity: 0, scaleX: 0.5 }}
+                      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                    />
+                  )}
+                </Link>
+              ) : (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={({ isActive }) =>
+                    `relative px-4 py-2 rounded-lg transition-colors duration-200 ${
+                      isActive
+                        ? 'text-primary-700 dark:text-primary-400 font-semibold'
+                        : 'text-gray-700 dark:text-gray-300 hover:text-primary-600'
+                    }`
+                  }
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span className="relative z-10">{link.label}</span>
+                      {/* Animated underline for active NavLink */}
+                      {isActive && (
+                        <motion.span
+                          layoutId="navbar-underline"
+                          className="absolute left-2 right-2 -bottom-1 h-1 rounded-full bg-gradient-to-r from-primary-500 to-primary-700 dark:from-primary-400 dark:to-primary-600"
+                          initial={{ opacity: 0, scaleX: 0.5 }}
+                          animate={{ opacity: 1, scaleX: 1 }}
+                          exit={{ opacity: 0, scaleX: 0.5 }}
+                          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                        />
+                      )}
+                    </>
+                  )}
+                </NavLink>
+              )
             ))}
 
+
             {/* ✅ Dark/Light Theme Button */}
-            <motion.button
-              onClick={toggleTheme}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-dark-700 hover:bg-gray-200 dark:hover:bg-dark-600 transition-all duration-200"
-              aria-label="Toggle theme"
-            >
-              {isDark ? (
-                <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5 text-gray-700 dark:text-gray-200" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              )}
-            </motion.button>
+              <motion.button
+                onClick={toggleTheme}
+                className="ml-4 p-2 rounded-full bg-white/20 dark:bg-black/30 hover:bg-white/30 dark:hover:bg-black/40 transition flex items-center justify-center"
+                aria-label="Toggle dark mode"
+                whileTap={{ scale: 0.9, rotate: 30 }}
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={isDark ? 'sun' : 'moon'}
+                    initial={{ scale: 0.7, rotate: 0 }}
+                    animate={{ scale: 1, rotate: 360 }}
+                    exit={{ scale: 0.7, rotate: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                    className="relative"
+                  >
+                    <motion.div
+                      className={`absolute inset-0 rounded-full ${isDark ? 'bg-yellow-300/60' : 'bg-gray-200/60'}`}
+                      initial={{ scale: 0.8, opacity: 0.5 }}
+                      animate={{ scale: 1.2, opacity: 1 }}
+                      exit={{ scale: 0.8, opacity: 0.5 }}
+                      transition={{ duration: 0.6, ease: 'easeInOut' }}
+                    />
+                    {isDark ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-300 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <circle cx="12" cy="12" r="5" fill="#fde047" />
+                        <g stroke="#fde047" strokeWidth="2">
+                          <line x1="12" y1="2" x2="12" y2="4" />
+                          <line x1="12" y1="20" x2="12" y2="22" />
+                          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                          <line x1="2" y1="12" x2="4" y2="12" />
+                          <line x1="20" y1="12" x2="22" y2="12" />
+                          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                        </g>
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-200 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" fill="#a3a3a3" />
+                      </svg>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -164,18 +260,29 @@ const Navbar = () => {
             >
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navLinks.map((link) => (
-                  <NavLink
-                    key={link.to}
-                    to={link.to}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "block px-3 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-md transition-all duration-200"
-                        : "block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 transition-colors"
-                    }
-                  >
-                    {link.label}
-                  </NavLink>
+                  link.isLink ? (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`block px-3 py-2 rounded-lg transition-colors duration-200 ${window.location.pathname === link.to ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-primary-600'}`}
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <NavLink
+                      key={link.to}
+                      to={link.to}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-3 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-md transition-all duration-200"
+                          : "block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 transition-colors"
+                      }
+                    >
+                      {link.label}
+                    </NavLink>
+                  )
                 ))}
 
                 {/* Dark/Light Toggle - Mobile */}
@@ -194,6 +301,7 @@ const Navbar = () => {
         </AnimatePresence>
       </div>
     </motion.nav>
+    </>
   )
 }
 

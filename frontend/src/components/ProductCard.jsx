@@ -1,12 +1,26 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { useUser } from '../context/UserContext'
-import { getProductImage } from '../utils/productImageHelper'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useUser } from '../context/UserContext';
+import { getProductImage } from '../utils/productImageHelper';
+import MicroButton from './MicroButton';
 
-const ProductCard = ({ product }) => {
-  const { isAuthenticated } = useUser()
-  
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.08,
+      duration: 0.5,
+      type: 'spring',
+      stiffness: 60
+    }
+  })
+}
+
+const ProductCard = ({ product, index }) => {
+  const { isAuthenticated } = useUser();
   const {
     id,
     name,
@@ -19,45 +33,50 @@ const ProductCard = ({ product }) => {
     inStock,
     discount,
     category
-  } = product
+  } = product;
 
-  const priceDifference = originalPrice - price
-  const discountPercentage = Math.round((priceDifference / originalPrice) * 100)
+  const priceDifference = originalPrice - price;
+  const discountPercentage = Math.round((priceDifference / originalPrice) * 100);
+  const productImage = getProductImage(name, category);
 
-  // Get the appropriate image based on product name and category
-  const productImage = getProductImage(name, category)
+
 
   return (
-    <motion.div 
-      className="card-gradient hover:shadow-glow transition-all duration-300 group dark:from-dark-800/90 dark:to-dark-700/90 dark:shadow-xl dark:border-dark-600/30"
-      whileHover={{ y: -8, scale: 1.02 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+    <motion.div
+      className="card-gradient transition-all duration-300 group dark:from-dark-800/90 dark:to-dark-700/90 dark:shadow-xl dark:border-dark-600/30"
+      custom={index}
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      // Only simple fade-in/slide-up, no hover/3D/tilt
+      style={{ position: 'relative', zIndex: 1 }}
     >
       {/* Product Image */}
       <div className="relative mb-6 overflow-hidden rounded-2xl">
         <img
           src={productImage}
           alt={name}
-          className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-56 object-cover transition-transform duration-500"
           onError={(e) => {
-            // Fallback to default image if the mapped image fails to load
-            e.target.src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop'
+            e.target.src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop';
           }}
         />
         {discount > 0 && (
-          <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm">
+          <div
+            className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm"
+            style={{ zIndex: 2 }}
+          >
             -{discountPercentage}%
           </div>
         )}
         {!inStock && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm">
+          <div
+            className="absolute top-3 right-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm"
+            style={{ zIndex: 2 }}
+          >
             Out of Stock
           </div>
         )}
-        {/* Shimmer effect overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
       </div>
 
       {/* Product Info */}
@@ -110,22 +129,21 @@ const ProductCard = ({ product }) => {
         <div className="flex space-x-3 pt-4">
           <Link
             to={`/product/${id}`}
-            className="btn-primary flex-1 text-center hover:from-primary-700 hover:to-secondary-700 hover:shadow-glow transform hover:scale-105 hover:-translate-y-1"
+            className="flex-1 text-center z-10"
+            style={{ pointerEvents: 'auto', zIndex: 10 }}
           >
-            View Details
+            <MicroButton className="w-full">View Details</MicroButton>
           </Link>
-          
           {isAuthenticated && (
-            <motion.button
-              className="p-3 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 hover:from-gray-200 hover:to-gray-300 transition-all duration-300 shadow-lg hover:shadow-glow dark:from-dark-700 dark:to-dark-600 dark:text-gray-200 dark:hover:from-dark-600 dark:hover:to-dark-500"
+            <MicroButton
+              className="p-3 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 dark:from-dark-700 dark:to-dark-600 dark:text-gray-200"
               title="Add to favorites"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.9 }}
+              style={{ width: 48, height: 48, minWidth: 48, minHeight: 48 }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
-            </motion.button>
+            </MicroButton>
           )}
         </div>
       </div>

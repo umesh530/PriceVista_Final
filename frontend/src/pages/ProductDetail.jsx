@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import PriceChart from '../components/PriceChart'
 import Loader from '../components/Loader'
+import Spin360Viewer from '../components/Spin360Viewer'
 
 const ProductDetail = () => {
   const { id } = useParams()
@@ -49,6 +50,7 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 dark:from-gray-900 dark:via-gray-800 dark:to-black transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
+<<<<<<< HEAD
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <div>
             <img
@@ -75,6 +77,35 @@ const ProductDetail = () => {
             >
               Add to Cart
             </button>
+=======
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div>
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-96 object-cover rounded-lg shadow-lg mb-4"
+          />
+          {/* 360 Spin Viewer below main image */}
+          <Spin360Viewer
+            spinImages={
+              // Demo: generate 24 placeholder images for the spin
+              Array.from({length: 24}, (_, i) => `https://picsum.photos/seed/${product.id}-spin-${i}/600/400`)
+            }
+            initialFrame={0}
+            className="w-full h-80 mt-2"
+            preload="auto"
+          />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+          <div className="flex items-center space-x-4 mb-6">
+            <span className="text-4xl font-bold text-gray-900">
+              {product.price.toFixed(2)}INR
+            </span>
+            <span className="text-2xl text-gray-500 line-through">
+              {product.originalPrice.toFixed(2)}INR
+            </span>
+>>>>>>> e91a5d3c430d161a53adcc76e1265ac2568a660b
           </div>
         </div>
         
