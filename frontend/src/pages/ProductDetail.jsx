@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import PriceChart from '../components/PriceChart'
 import Loader from '../components/Loader'
+import Spin360Viewer from '../components/Spin360Viewer'
 
 const ProductDetail = () => {
   const { id } = useParams()
@@ -54,7 +55,17 @@ const ProductDetail = () => {
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-96 object-cover rounded-lg shadow-lg"
+            className="w-full h-96 object-cover rounded-lg shadow-lg mb-4"
+          />
+          {/* 360 Spin Viewer below main image */}
+          <Spin360Viewer
+            spinImages={
+              // Demo: generate 24 placeholder images for the spin
+              Array.from({length: 24}, (_, i) => `https://picsum.photos/seed/${product.id}-spin-${i}/600/400`)
+            }
+            initialFrame={0}
+            className="w-full h-80 mt-2"
+            preload="auto"
           />
         </div>
         <div>

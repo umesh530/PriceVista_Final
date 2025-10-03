@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useUser } from '../context/UserContext';
 import { getProductImage } from '../utils/productImageHelper';
 import MicroButton from './MicroButton';
@@ -39,76 +39,44 @@ const ProductCard = ({ product, index }) => {
   const discountPercentage = Math.round((priceDifference / originalPrice) * 100);
   const productImage = getProductImage(name, category);
 
-  // 3D tilt effect
-  const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [0, 1], [0, -8]);
-  const rotateY = useTransform(x, [0, 1], [0, 8]);
 
-  function handleMouseMove(e) {
-    const rect = ref.current.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-    x.set(px);
-    y.set(py);
-  }
-  function handleMouseLeave() {
-    x.set(0.5);
-    y.set(0.5);
-  }
 
   return (
     <motion.div
-      ref={ref}
       className="card-gradient transition-all duration-300 group dark:from-dark-800/90 dark:to-dark-700/90 dark:shadow-xl dark:border-dark-600/30"
       custom={index}
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      whileHover={{ y: -12, scale: 1.035, boxShadow: '0 8px 32px 0 rgba(80,0,180,0.13)' }}
-      whileTap={{ scale: 0.98 }}
-      layout
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: 'preserve-3d',
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      // Only simple fade-in/slide-up, no hover/3D/tilt
+      style={{ position: 'relative', zIndex: 1 }}
     >
       {/* Product Image */}
       <div className="relative mb-6 overflow-hidden rounded-2xl">
         <img
           src={productImage}
           alt={name}
-          className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-56 object-cover transition-transform duration-500"
           onError={(e) => {
             e.target.src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop';
           }}
         />
         {discount > 0 && (
-          <motion.div
+          <div
             className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm"
-            initial={{ scale: 0.7, opacity: 0 }}
-            animate={{ scale: 1.1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+            style={{ zIndex: 2 }}
           >
             -{discountPercentage}%
-          </motion.div>
+          </div>
         )}
         {!inStock && (
-          <motion.div
+          <div
             className="absolute top-3 right-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white text-sm font-bold px-3 py-1 rounded-xl shadow-lg backdrop-blur-sm"
-            initial={{ scale: 0.7, opacity: 0 }}
-            animate={{ scale: 1.1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+            style={{ zIndex: 2 }}
           >
             Out of Stock
-          </motion.div>
+          </div>
         )}
-        {/* Shimmer effect overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
       </div>
 
       {/* Product Info */}
@@ -159,9 +127,13 @@ const ProductCard = ({ product, index }) => {
 
         {/* Actions */}
         <div className="flex space-x-3 pt-4">
-          <MicroButton as="a" href={`/product/${id}`} className="flex-1 text-center">
-            View Details
-          </MicroButton>
+          <Link
+            to={`/product/${id}`}
+            className="flex-1 text-center z-10"
+            style={{ pointerEvents: 'auto', zIndex: 10 }}
+          >
+            <MicroButton className="w-full">View Details</MicroButton>
+          </Link>
           {isAuthenticated && (
             <MicroButton
               className="p-3 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 dark:from-dark-700 dark:to-dark-600 dark:text-gray-200"
