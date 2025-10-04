@@ -3,8 +3,10 @@ import { useSearchParams } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import Loader from '../components/Loader'
 import api from '../services/api'
+import { useTheme } from '../context/ThemeContext'
 
 const SearchResults = () => {
+  const { isDark } = useTheme ? useTheme() : { isDark: false }
   const [searchParams] = useSearchParams()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(false)
@@ -164,7 +166,7 @@ const SearchResults = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
+    <div className={`min-h-screen ${isDark ? "bg-gradient-to-r from-gray-900 via-black to-gray-900" : "bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         {/* Search Header */}
         <div className="mb-8">
@@ -179,7 +181,7 @@ const SearchResults = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="lg:w-64 flex-shrink-0">
-            <div className="card">
+            <div className={`card bg-white dark:bg-[#181a2a] rounded-xl shadow p-6`}>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Filters</h3>
               {/* Category Filter */}
               <div className="mb-6">
@@ -189,7 +191,7 @@ const SearchResults = () => {
                 <select
                   value={filters.category}
                   onChange={(e) => handleFilterChange('category', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-800 text-gray-900 dark:text-gray-100"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-[#23263a] text-gray-900 dark:text-gray-100"
                 >
                   <option value="">All Categories</option>
                   <option value="Electronics">Electronics</option>
@@ -208,7 +210,7 @@ const SearchResults = () => {
                 <select
                   value={filters.priceRange}
                   onChange={(e) => handleFilterChange('priceRange', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-800 text-gray-900 dark:text-gray-100"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-[#23263a] text-gray-900 dark:text-gray-100"
                 >
                   <option value="">Any Price</option>
                   <option value="0-50">Under 50INR</option>
@@ -226,7 +228,7 @@ const SearchResults = () => {
                 <select
                   value={filters.rating}
                   onChange={(e) => handleFilterChange('rating', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-800 text-gray-900 dark:text-gray-100"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-[#23263a] text-gray-900 dark:text-gray-100"
                 >
                   <option value="">Any Rating</option>
                   <option value="4">4+ Stars</option>
@@ -242,7 +244,7 @@ const SearchResults = () => {
                 <select
                   value={filters.retailer}
                   onChange={(e) => handleFilterChange('retailer', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-800 text-gray-900 dark:text-gray-100"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-[#23263a] text-gray-900 dark:text-gray-100"
                 >
                   <option value="">All Retailers</option>
                   <option value="Amazon">Amazon</option>
@@ -255,7 +257,7 @@ const SearchResults = () => {
               {/* Clear Filters */}
               <button
                 onClick={clearFilters}
-                className="w-full btn-secondary"
+                className="w-full btn-secondary bg-gray-200 dark:bg-black text-gray-900 dark:text-white rounded-md py-2 mt-2 transition"
               >
                 Clear Filters
               </button>

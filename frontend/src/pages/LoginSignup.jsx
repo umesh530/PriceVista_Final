@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom"
 import { useUser } from "../context/UserContext"
 import { useTheme } from "../context/ThemeContext"
 import { motion, AnimatePresence } from "framer-motion"
-import gsap from "gsap"
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true)
